@@ -14,21 +14,44 @@ public class BossAnimatorController : AnimatorControllerBase
         anim.SetInteger(_paramName, _intVal);
     }
 
-    public void OnAttack(string _attackType)
+    public void WarnNormalAttack(int _attackType)
     {
-        if (_attackType.Equals("CloseRangeAttack"))
-            bossNoramlAttackAreaColliders[anim.GetInteger("attackType")].OnAttack(3.0f);
-        else if(_attackType.Equals("LongRangeAttack"))
-            bossNoramlAttackAreaColliders[anim.GetInteger("attackType") - 10].OnAttack(3.0f);
-        else if(_attackType.Equals("CloseRangeSkillAttack"))
-            bossSkillAttackAreaColliders[anim.GetInteger("skillType")].OnAttack(3.0f);
-        else if(_attackType.Equals("LongRangeSkillAttack"))
-            bossSkillAttackAreaColliders[anim.GetInteger("skillType") - 10].OnAttack(3.0f);
+        if (_attackType < 10)
+            bossArea.CloseNormalAttacks[_attackType].gameObject.SetActive(true);
+        else
+            bossArea.LongNormalAttacks[_attackType % 10].gameObject.SetActive(true);
+    }
+
+    public void WarnSkiilAttack(int _skillType)
+    {
+        if (_skillType < 10)
+            bossArea.CloseSkillAttacks[_skillType].gameObject.SetActive(true);
+        else
+            bossArea.LongSkillAttacks[_skillType % 10].gameObject.SetActive(true);
     }
 
 
-    [SerializeField]
-    private BossAttackAreaCollider[] bossNoramlAttackAreaColliders;
-    [SerializeField]
-    private BossAttackAreaCollider[] bossSkillAttackAreaColliders;
+    public void OnNoramlAttack(int _attackType)
+    {
+        if (_attackType < 10)
+            bossArea.CloseNormalAttacks[_attackType].OnAttack();
+        else
+            bossArea.LongNormalAttacks[_attackType % 10].OnAttack();
+    }
+
+    public void OnSkiilAttack(int _skillType)
+    {
+        if (_skillType < 10)
+            bossArea.CloseSkillAttacks[_skillType].OnAttack();
+        else
+            bossArea.LongSkillAttacks[_skillType % 10].OnAttack();
+    }
+
+    protected override void Awake()
+    {
+        base.Awake();
+        bossArea = GetComponentInParent<BossAttackAreaSetting>();
+    }
+
+    private BossAttackAreaSetting bossArea = null;
 }

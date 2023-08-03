@@ -5,7 +5,7 @@ using UnityEngine;
 [System.Serializable]
 public struct BossAttackSetting
 {
-    [Header("-Attack & Skill")]
+    [Header("-Attack & Skill Count")]
     [SerializeField]
     public int closeRangeAttackCount;
     [SerializeField]
@@ -14,8 +14,6 @@ public struct BossAttackSetting
     public int closeRangeSkillCount;
     [SerializeField]
     public int longRangeSkillCount;
-    [SerializeField]
-    public float skillDelayTime;
 
     [Header("-Attack Range")]
     [SerializeField]
@@ -32,4 +30,8 @@ public struct BossAttackSetting
     public bool hasCloseRangeSkill;
     [SerializeField]
     public bool hasLongRangeSkill;
+
+    [Header("-Skill Setting")]
+    [SerializeField]
+    public float skillDelayTime;
 }

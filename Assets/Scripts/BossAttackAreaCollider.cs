@@ -4,27 +4,41 @@ using UnityEngine;
 
 public class BossAttackAreaCollider : MonoBehaviour
 {
-    public void OnAttack(float _delayTime)
+    public void Setup(float _dmg)
     {
-        attackAreaCollider.enabled = true;
-        Invoke("AttackFinish", _delayTime);
+        dmg = _dmg;
+        gameObject.SetActive(false);
     }
 
-    private void AttackFinish()
+    public virtual void OnAttack()
     {
-        attackAreaCollider.enabled = false;
+        myCollider.enabled = true;
+        StartCoroutine("AutoDeActivate");
+    }
+
+    protected virtual IEnumerator AutoDeActivate()
+    {
+        yield return new WaitForSeconds(DeactivateTime);
+
+        myCollider.enabled = false;
+        gameObject.SetActive(false);
+    }
+
+    protected virtual void Awake()
+    {
+        myCollider = GetComponent<Collider>();
+    }
+
+    protected virtual void Start()
+    {
+        myCollider.enabled = false;
     }
 
 
-    private void Awake()
-    {
-        attackAreaCollider = GetComponent<Collider>();
-    }
+    [SerializeField]
+    protected float DeactivateTime = 1.5f;
 
-    private void Start()
-    {
-        attackAreaCollider.enabled = false;
-    }
+    protected Collider myCollider = null;
 
-    private Collider attackAreaCollider = null;
+    protected float dmg = 0.0f;
 }
