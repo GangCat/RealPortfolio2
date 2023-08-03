@@ -54,6 +54,11 @@ public class ProjectileController : MonoBehaviour
             }
             else if (_collision.transform.CompareTag("Wall"))
                 SpawnImpact(_collision, -transform.forward);
+            else if (_collision.transform.CompareTag("Boss"))
+            {
+                SpawnImpact(_collision, -transform.forward);
+                _collision.transform.GetComponent<BossCollider>().TakeDmg(dmg);
+            }
         }
 
         Disable();

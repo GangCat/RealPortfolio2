@@ -19,10 +19,12 @@ public class ImpactMemoryPool : MonoBehaviour
 
     private void Start()
     {
-        memoryPool = new MemoryPool(impactPrefab, 10);
+        memoryPool = new MemoryPool(impactPrefab, increaseCnt);
     }
 
 
+    [SerializeField]
+    private int increaseCnt = 3;
     [SerializeField]
     private GameObject impactPrefab;
     private MemoryPool memoryPool;

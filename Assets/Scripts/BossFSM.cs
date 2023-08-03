@@ -58,19 +58,6 @@ public class BossFSM : MonoBehaviour
             Quaternion q = Quaternion.LookRotation(moveDir);
             transform.rotation = q;
             transform.Translate(transform.forward * statusSpeed.RunSpeed * Time.deltaTime, Space.World);
-
-            /*rigid.velocity = moveDir.normalized * statusSpeed.WalkSpeed;
-            //transform.Translate(moveDir.normalized * statusSpeed.WalkSpeed * Time.deltaTime, Space.World);
-            //transform.LookAt(targetTr);
-            //moveDir.y = transform.position.;
-            //q = Quaternion.Euler(moveDir);
-            //Matrix4x4 matRot = Matrix4x4.Rotate(q);
-            //transform.forward = matRot.MultiplyPoint3x4(transform.forward);
-             *   Matrix4x4 matRot = Matrix4x4.Rotate(transform.rotation);
-                 matRot = matRot.inverse;
-                 _moveDir = matRot.MultiplyPoint3x4(_moveDir).normalized;
-             * 
-             */
         }
     }
 
@@ -161,7 +148,7 @@ public class BossFSM : MonoBehaviour
 
         prevLongRangeSkillNum = skillType;
         bossAnim.SetInteger("skillType", skillType);
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1.5f);
 
         while (bossAnim.CurAnimationIs("Skill" + skillType))
             yield return null;
@@ -174,8 +161,8 @@ public class BossFSM : MonoBehaviour
 
     private IEnumerator Dead()
     {
-
-
+        gameObject.layer = 13;
+        bossAnim.Play("Dead", -1, 0.0f);
         yield return null;
     }
 
@@ -244,7 +231,6 @@ public class BossFSM : MonoBehaviour
 
     private void Awake()
     {
-        statusHp = GetComponent<StatusHP>();
         statusSpeed = GetComponent<StatusSpeed>();
     }
 
@@ -264,8 +250,6 @@ public class BossFSM : MonoBehaviour
 
 
     [Header("-Conponents")]
-    [SerializeField]
-    private Collider[] bossColliders;
     [SerializeField]
     private BossAnimatorController bossAnim = null;
 
@@ -287,6 +271,5 @@ public class BossFSM : MonoBehaviour
     private int prevLongRangeSkillNum = -1;
 
     private EBossState bossState = EBossState.None;
-    private StatusHP statusHp = null;
     private StatusSpeed statusSpeed = null;
 }

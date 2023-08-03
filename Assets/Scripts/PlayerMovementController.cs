@@ -62,6 +62,7 @@ public class PlayerMovementController : MonoBehaviour
         weaponAR.ChangeState(EWeaponState.Idle);
         playerCollider.IgnoreLayer(gameObject.layer, LayerMask.NameToLayer("Enemy"), true);
         playerCollider.IgnoreLayer(gameObject.layer, LayerMask.NameToLayer("Interactive"), true);
+        playerCollider.IgnoreLayer(gameObject.layer, LayerMask.NameToLayer("Boss"), true);
 
         float lastDashTime = Time.time;
         while (true)
@@ -86,6 +87,7 @@ public class PlayerMovementController : MonoBehaviour
 
                 playerCollider.IgnoreLayer(gameObject.layer, LayerMask.NameToLayer("Enemy"), false);
                 playerCollider.IgnoreLayer(gameObject.layer, LayerMask.NameToLayer("Interactive"), false);
+                playerCollider.IgnoreLayer(gameObject.layer, LayerMask.NameToLayer("Boss"), false);
             }
         }
 
