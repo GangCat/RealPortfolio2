@@ -3366,11 +3366,16 @@ MonoBehaviour:
     longRangeSkillCount: 0
     closeRangeAttackRange: 6
     longRangeAttackRange: 16
+    ultAttackRange: 0
     hasCloseRangeAttack: 1
     hasLongRangeAttack: 0
     hasCloseRangeSkill: 1
     hasLongRangeSkill: 0
+    hasUltSkill: 0
     skillDelayTime: 5
+    UltSkillDelayTime: 0
+  delayIdle: 2
+  delayRun: 1
 --- !u!114 &996800144
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3389,12 +3394,14 @@ MonoBehaviour:
   closeRangeSkillDamages:
   - 5
   longRangeSkillDamages: []
+  UltimateSkillDamage: 0
   closeRangeNormalAttackAreaColliders:
   - {fileID: 1197349958}
   longRangeNormalAttackAreaColliders: []
   closeRangeSkillAttackAreaColliders:
   - {fileID: 1475141759}
   longRangeSkillAttackAreaColliders: []
+  UltimateSkillAttackAreaCollider: {fileID: 0}
 --- !u!114 &996800146
 MonoBehaviour:
   m_ObjectHideFlags: 0
