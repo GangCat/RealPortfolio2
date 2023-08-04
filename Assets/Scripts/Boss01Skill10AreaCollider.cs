@@ -1,9 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class Boss01Skill10AreaCollider : BossAttackAreaCollider
+public class Boss01Skill10AreaCollider : BossTickDamageSkillAreaCollider
 {
     public override void OnAttack()
     {
@@ -11,27 +10,6 @@ public class Boss01Skill10AreaCollider : BossAttackAreaCollider
         pullCollider.GetComponent<Collider>().enabled = true;
     }
 
-    private void Update()
-    {
-        lastDamageTime += Time.deltaTime;
-    }
-
-    private void OnEnable()
-    {
-        lastDamageTime = 1.0f;
-    }
-
-    private void OnTriggerStay(Collider _other)
-    {
-        if (_other.CompareTag("Player"))
-        {
-            if (lastDamageTime >= damageTickTime)
-            {
-                lastDamageTime = 0.0f;
-                _other.GetComponent<PlayerCollider>().TakeDmg(dmg);
-            }
-        }
-    }
 
     protected override void Awake()
     {
@@ -48,9 +26,5 @@ public class Boss01Skill10AreaCollider : BossAttackAreaCollider
         gameObject.SetActive(false);
     }
 
-    [SerializeField]
-    private float damageTickTime = 0.5f;
-
-    private float lastDamageTime = 0.0f;
     private Boss01Skill10PullAreaCollider pullCollider = null;
 }

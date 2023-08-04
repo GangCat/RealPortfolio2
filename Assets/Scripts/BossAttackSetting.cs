@@ -20,6 +20,8 @@ public struct BossAttackSetting
     public float closeRangeAttackRange;
     [SerializeField]
     public float longRangeAttackRange;
+    [SerializeField]
+    public float ultAttackRange;
 
     [Header("-Has Attack Type")]
     [SerializeField]
@@ -30,8 +32,12 @@ public struct BossAttackSetting
     public bool hasCloseRangeSkill;
     [SerializeField]
     public bool hasLongRangeSkill;
+    [SerializeField]
+    public bool hasUltSkill;
 
-    [Header("-Skill Setting")]
+    [Header("-Skill Delay Setting")]
     [SerializeField]
     public float skillDelayTime;
+    [SerializeField]
+    public float UltSkillDelayTime;
 }

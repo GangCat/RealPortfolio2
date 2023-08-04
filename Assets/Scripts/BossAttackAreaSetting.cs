@@ -8,22 +8,26 @@ public class BossAttackAreaSetting : MonoBehaviour
     public BossAttackAreaCollider[] LongNormalAttacks => longRangeNormalAttackAreaColliders;
     public BossAttackAreaCollider[] CloseSkillAttacks => closeRangeSkillAttackAreaColliders;
     public BossAttackAreaCollider[] LongSkillAttacks => longRangeSkillAttackAreaColliders;
+    public BossAttackAreaCollider UltSkillAttack => UltimateSkillAttackAreaCollider;
 
 
     private void Start()
     {
         int i = 0;
-        for (i = 0; i < closeRangeAttackDamages.Length; ++i)
+        for (i = 0; i < closeRangeNormalAttackAreaColliders.Length; ++i)
             closeRangeNormalAttackAreaColliders[i].Setup(closeRangeAttackDamages[i]);
 
-        for (i = 0; i < longRangeAttackDamages.Length; ++i)
+        for (i = 0; i < longRangeNormalAttackAreaColliders.Length; ++i)
             longRangeNormalAttackAreaColliders[i].Setup(longRangeAttackDamages[i]);
 
-        for (i = 0; i < closeRangeSkillDamages.Length; ++i)
+        for (i = 0; i < closeRangeSkillAttackAreaColliders.Length; ++i)
             closeRangeSkillAttackAreaColliders[i].Setup(closeRangeSkillDamages[i]);
 
-        for (i = 0; i < longRangeSkillDamages.Length; ++i)
+        for (i = 0; i < longRangeSkillAttackAreaColliders.Length; ++i)
             longRangeSkillAttackAreaColliders[i].Setup(longRangeSkillDamages[i]);
+
+        if(UltimateSkillAttackAreaCollider != null)
+            UltimateSkillAttackAreaCollider.Setup(UltimateSkillDamage);
     }
 
 
@@ -37,6 +41,8 @@ public class BossAttackAreaSetting : MonoBehaviour
     private float[] closeRangeSkillDamages;
     [SerializeField]
     private float[] longRangeSkillDamages;
+    [SerializeField]
+    private float UltimateSkillDamage;
 
     [Header("-Attack Area Colliders")]
     [SerializeField]
@@ -47,4 +53,6 @@ public class BossAttackAreaSetting : MonoBehaviour
     private BossAttackAreaCollider[] closeRangeSkillAttackAreaColliders;
     [SerializeField]
     private BossAttackAreaCollider[] longRangeSkillAttackAreaColliders;
+    [SerializeField]
+    private BossAttackAreaCollider UltimateSkillAttackAreaCollider;
 }

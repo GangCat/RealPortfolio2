@@ -121,9 +121,9 @@ GameObject:
   m_Component:
   - component: {fileID: 477746877}
   - component: {fileID: 477746878}
-  - component: {fileID: 477746879}
   - component: {fileID: 477746881}
   - component: {fileID: 477746880}
+  - component: {fileID: 7287675228305437611}
   m_Layer: 15
   m_Name: Skill10Area
   m_TagString: Untagged
@@ -160,20 +160,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &477746879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 477746874}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7be66fdcaa69f6643a0dc8bee040312b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DeactivateTime: 2.5
-  damageTickTime: 0.2
 --- !u!33 &477746881
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -224,6 +210,20 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7287675228305437611
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 477746874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ab93c7a4bca7d94c8221f30ca3d3ae3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DeactivateTime: 2.5
+  damageTickTime: 0.2
 --- !u!1 &1397254080
 GameObject:
   m_ObjectHideFlags: 0
@@ -377,7 +377,7 @@ SphereCollider:
   m_GameObject: {fileID: 1448708346}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Radius: 70
   m_Center: {x: 0, y: 0, z: 0}
@@ -842,9 +842,9 @@ GameObject:
   m_Component:
   - component: {fileID: 7308072260819384596}
   - component: {fileID: 3867812143159862219}
+  - component: {fileID: 1296762684}
   - component: {fileID: 1758385053639706660}
   - component: {fileID: 624135686969796860}
-  - component: {fileID: 1296762684}
   m_Layer: 15
   m_Name: BossIronreaver1_WithCollider
   m_TagString: Boss
@@ -861,7 +861,7 @@ Transform:
   m_GameObject: {fileID: 7308072260819042152}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7308072260819462964}
@@ -897,7 +897,33 @@ MonoBehaviour:
     hasLongRangeAttack: 0
     hasCloseRangeSkill: 0
     hasLongRangeSkill: 1
-    skillDelayTime: 10
+    skillDelayTime: 15
+--- !u!114 &1296762684
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7308072260819042152}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 684725bd996c64c4fb5e080c773217d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  closeRangeAttackDamages:
+  - 15
+  - 20
+  longRangeAttackDamages: []
+  closeRangeSkillDamages: []
+  longRangeSkillDamages:
+  - 5
+  closeRangeNormalAttackAreaColliders:
+  - {fileID: 1397254083}
+  - {fileID: 347794214}
+  longRangeNormalAttackAreaColliders: []
+  closeRangeSkillAttackAreaColliders: []
+  longRangeSkillAttackAreaColliders:
+  - {fileID: 7287675228305437611}
 --- !u!114 &1758385053639706660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -913,8 +939,8 @@ MonoBehaviour:
   onHPEvent:
     m_PersistentCalls:
       m_Calls: []
-  curHP: 2000
-  maxHP: 2000
+  curHP: 2500
+  maxHP: 10
 --- !u!114 &624135686969796860
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -931,32 +957,6 @@ MonoBehaviour:
   walkSpeed: 7
   maxRunSpeed: 7
   maxWalkSpeed: 7
---- !u!114 &1296762684
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7308072260819042152}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 684725bd996c64c4fb5e080c773217d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  closeRangeAttackDamages:
-  - 30
-  - 30
-  longRangeAttackDamages: []
-  closeRangeSkillDamages: []
-  longRangeSkillDamages:
-  - 5
-  closeRangeNormalAttackAreaColliders:
-  - {fileID: 1397254083}
-  - {fileID: 347794214}
-  longRangeNormalAttackAreaColliders: []
-  closeRangeSkillAttackAreaColliders: []
-  longRangeSkillAttackAreaColliders:
-  - {fileID: 477746879}
 --- !u!1 &7308072260819045734
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BossNormalAttackAreaCollider : BossAttackAreaCollider
 {
-    private void OnTriggerEnter(Collider _other)
+    protected void OnTriggerEnter(Collider _other)
     {
         if (_other.CompareTag("Player"))
         {

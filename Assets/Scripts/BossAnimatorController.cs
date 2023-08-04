@@ -30,6 +30,11 @@ public class BossAnimatorController : AnimatorControllerBase
             bossArea.LongSkillAttacks[_skillType % 10].gameObject.SetActive(true);
     }
 
+    public void WarnUltSkillAttack()
+    {
+        bossArea.UltSkillAttack.gameObject.SetActive(true);
+    }
+
 
     public void OnNoramlAttack(int _attackType)
     {
@@ -45,6 +50,11 @@ public class BossAnimatorController : AnimatorControllerBase
             bossArea.CloseSkillAttacks[_skillType].OnAttack();
         else
             bossArea.LongSkillAttacks[_skillType % 10].OnAttack();
+    }
+
+    public void OnUltSkillAttack()
+    {
+        bossArea.UltSkillAttack.OnAttack();
     }
 
     protected override void Awake()

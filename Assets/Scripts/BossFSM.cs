@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class BossFSM : MonoBehaviour
 {
-    public enum EBossState { None = -1, Birth, Idle, Run, CloseRangeAttack, LongRangeAttack, CloseRangeSkillAttack, LongRangeSkillAttack, Dead }
+    public enum EBossState { None = -1, Birth, Idle, Run, CloseRangeAttack, LongRangeAttack, CloseRangeSkillAttack, LongRangeSkillAttack, UltSkillAttack, Dead }
 
     public void ChangeState(EBossState _newState)
     {
@@ -46,19 +46,41 @@ public class BossFSM : MonoBehaviour
         bossAnim.SetBool("isBossRun", true);
         float sqrDist = 0.0f;
         Vector3 moveDir = Vector3.zero;
+        float moveStartTime = Time.time;
+
+        while(Time.time - moveStartTime < delayRun)
+        {
+            moveDir = CalcMoveDir();
+            Move(moveDir);
+            yield return null;
+        }
 
         while (true)
         {
-            yield return null;
-
             moveDir = CalcMoveDir();
             sqrDist = CalcDistanceToTarget(moveDir);
             ChangeStateWithDistance(sqrDist);
 
-            Quaternion q = Quaternion.LookRotation(moveDir);
-            transform.rotation = q;
-            transform.Translate(transform.forward * statusSpeed.RunSpeed * Time.deltaTime, Space.World);
+            Move(moveDir);
+            yield return null;
         }
+    }
+
+    private void Move(Vector3 _moveDir)
+    {
+        transform.rotation = Quaternion.LookRotation(_moveDir);
+
+        if (!PauseMove(_moveDir))
+            transform.Translate(transform.forward * statusSpeed.RunSpeed * Time.deltaTime, Space.World);
+    }
+
+    private bool PauseMove(Vector3 _moveDir)
+    {
+        if (Vector3.SqrMagnitude(_moveDir) < 14.0f)
+            return true;
+
+        return false;
+
     }
 
     private IEnumerator CloseRangeAttack()
@@ -158,6 +180,19 @@ public class BossFSM : MonoBehaviour
         StartCoroutine("CalcSkillDelay");
         yield break;
     }
+    private IEnumerator UltSkillAttack()
+    {
+        StopCoroutine("CalcUltSkillDelay");
+        bossAnim.SetTrigger("onUltSkill");
+        yield return new WaitForSeconds(1.5f);
+
+        while (bossAnim.CurAnimationIs("Ultimate"))
+            yield return null;
+
+        ChangeState(EBossState.Idle);
+        StartCoroutine("CalcUltSkillDelay");
+        yield return null;
+    }
 
     private IEnumerator Dead()
     {
@@ -166,12 +201,23 @@ public class BossFSM : MonoBehaviour
         yield return null;
     }
 
+
     private IEnumerator CalcSkillDelay()
     {
         timeAfterSkiilAttack = 0.0f;
         while (true)
         {
             timeAfterSkiilAttack += Time.deltaTime;
+            yield return null;
+        }
+    }
+
+    private IEnumerator CalcUltSkillDelay()
+    {
+        timeAfterUltSkillAttack = 0.0f;
+        while (true)
+        {
+            timeAfterUltSkillAttack += Time.deltaTime;
             yield return null;
         }
     }
@@ -189,7 +235,15 @@ public class BossFSM : MonoBehaviour
     private void ChangeStateWithDistance(float _sqrDist)
     {
         if (_sqrDist > Mathf.Pow(bossAttackSetting.longRangeAttackRange, 2.0f))
-            return;
+        {
+            if(bossAttackSetting.hasUltSkill)
+                if(timeAfterUltSkillAttack > bossAttackSetting.UltSkillDelayTime)
+                {
+                    bossAnim.SetBool("isBossRun", false);
+                    ChangeState(EBossState.UltSkillAttack);
+                    return;
+                }
+        }
         else if (_sqrDist > Mathf.Pow(bossAttackSetting.closeRangeAttackRange, 2.0f))
         {
             if (bossAttackSetting.hasLongRangeSkill)
@@ -198,6 +252,7 @@ public class BossFSM : MonoBehaviour
                 {
                     bossAnim.SetBool("isBossRun", false);
                     ChangeState(EBossState.LongRangeSkillAttack);
+                    return;
                 }
             }
 
@@ -216,6 +271,7 @@ public class BossFSM : MonoBehaviour
                 {
                     bossAnim.SetBool("isBossRun", false);
                     ChangeState(EBossState.CloseRangeSkillAttack);
+                    return;
                 }
             }
 
@@ -257,13 +313,18 @@ public class BossFSM : MonoBehaviour
     [SerializeField]
     private Transform targetTr = null;
 
-    [Header("-BossAttackSetting")]
+    [Header("-Boss Attack Setting")]
     [SerializeField]
     private BossAttackSetting bossAttackSetting;
 
-
+    [Header("-Animation Delay Setting")]
+    [SerializeField]
     private float delayIdle = 2.0f;
+    [SerializeField]
+    private float delayRun = 1.0f;
+
     private float timeAfterSkiilAttack = 0.0f;
+    private float timeAfterUltSkillAttack = 0.0f;
 
     private int prevCloseRangeAttackNum = -1;
     private int prevLongRangeAttackNum = -1;

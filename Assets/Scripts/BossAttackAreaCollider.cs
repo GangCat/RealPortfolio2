@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BossAttackAreaCollider : MonoBehaviour
 {
-    public void Setup(float _dmg)
+    public virtual void Setup(float _dmg)
     {
         dmg = _dmg;
         gameObject.SetActive(false);
@@ -36,7 +36,7 @@ public class BossAttackAreaCollider : MonoBehaviour
 
 
     [SerializeField]
-    protected float DeactivateTime = 1.5f;
+    protected float DeactivateTime = 0.1f;
 
     protected Collider myCollider = null;
 
