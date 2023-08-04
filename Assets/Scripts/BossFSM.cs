@@ -180,6 +180,7 @@ public class BossFSM : MonoBehaviour
         StartCoroutine("CalcSkillDelay");
         yield break;
     }
+
     private IEnumerator UltSkillAttack()
     {
         StopCoroutine("CalcUltSkillDelay");
@@ -200,7 +201,6 @@ public class BossFSM : MonoBehaviour
         bossAnim.Play("Dead", -1, 0.0f);
         yield return null;
     }
-
 
     private IEnumerator CalcSkillDelay()
     {
@@ -283,7 +283,6 @@ public class BossFSM : MonoBehaviour
 
         }
     }
-
 
     private void Awake()
     {

@@ -13,12 +13,14 @@ public class Boss03Attack01AreaCollider : BossNormalAttackAreaCollider
 
     private void OnEnable()
     {
-        myColliders[0].gameObject.SetActive(true);
-        Invoke("ActivateSecondArea", 0.33f);
+        StartCoroutine("OnColliderActive");
     }
 
-    private void ActivateSecondArea()
+    private IEnumerator OnColliderActive()
     {
+        myColliders[0].gameObject.SetActive(true);
+        yield return new WaitForSeconds(0.4f);
+
         myColliders[1].gameObject.SetActive(true);
     }
 

@@ -9710,8 +9710,6 @@ GameObject:
   - component: {fileID: 1923289532}
   - component: {fileID: 1923289531}
   - component: {fileID: 1923289530}
-  - component: {fileID: 5635473764572035821}
-  - component: {fileID: 2198650461401115138}
   m_Layer: 15
   m_Name: FirstAttack1Area
   m_TagString: Untagged
@@ -9797,32 +9795,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &5635473764572035821
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1923289528}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.0000005, y: 1.0000002, z: 0.0000002384186}
-  m_Center: {x: 0, y: 0, z: -0.0000000037252903}
---- !u!65 &2198650461401115138
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1923289528}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 1.0000005, y: 1.0000002, z: 0.0000002384186}
-  m_Center: {x: 0, y: 0, z: -0.0000000037252903}
 --- !u!1 &95397580023539631
 GameObject:
   m_ObjectHideFlags: 0
