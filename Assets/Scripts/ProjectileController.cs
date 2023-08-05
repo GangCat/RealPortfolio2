@@ -25,7 +25,8 @@ public class ProjectileController : MonoBehaviour
 
     private void Disable()
     {
-        memoryPool.DeactivatePoolItem(gameObject);
+        if(memoryPool != null)
+            memoryPool.DeactivatePoolItem(gameObject);
     }
 
     private void Update()

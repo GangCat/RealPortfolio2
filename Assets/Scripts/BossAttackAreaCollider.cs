@@ -34,6 +34,16 @@ public class BossAttackAreaCollider : MonoBehaviour
         myCollider.enabled = false;
     }
 
+    protected void OnTriggerEnter(Collider _other)
+    {
+        if (_other.CompareTag("Player"))
+        {
+            _other.GetComponent<PlayerCollider>().TakeDmg(dmg);
+        }
+        myCollider.enabled = false;
+        gameObject.SetActive(false);
+    }
+
 
     [SerializeField]
     protected float DeactivateTime = 0.1f;

@@ -40,6 +40,15 @@ public class PlayerHUDController : MonoBehaviour
             StopCoroutine("OnBloodScreen");
             StartCoroutine("OnBloodScreen", ratioHP < 0.3f);
         }
+        else
+        {
+            if (statusHP.GetRatio() > 0.3f)
+            {
+                Color color = imagesBloodScreen[0].color;
+                color.a = 0;
+                imagesBloodScreen[0].color = color;
+            }
+        }
     }
 
     private void UpdateWeaponHUD(float _curAmmo)

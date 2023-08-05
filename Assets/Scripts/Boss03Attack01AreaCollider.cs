@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Boss03Attack01AreaCollider : BossNormalAttackAreaCollider
+public class Boss03Attack01AreaCollider : BossAttackAreaCollider
 {
     public override void Setup(float _dmg)
     {
         dmg = _dmg;
-        foreach (BossNormalAttackAreaCollider col in myColliders)
+        foreach (BossAttackAreaCollider col in myColliders)
             col.Setup(dmg);
     }
 
@@ -59,5 +59,5 @@ public class Boss03Attack01AreaCollider : BossNormalAttackAreaCollider
     private bool isFirstCall = true;
 
     [SerializeField]
-    private BossNormalAttackAreaCollider[] myColliders;
+    private BossAttackAreaCollider[] myColliders;
 }
