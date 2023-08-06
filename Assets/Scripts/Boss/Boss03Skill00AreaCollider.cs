@@ -58,10 +58,6 @@ public class Boss03Skill00AreaCollider : BossAttackAreaCollider
     {
     }
 
-    protected override void Start()
-    {
-    }
-
 
     private uint attackCount = 0;
 

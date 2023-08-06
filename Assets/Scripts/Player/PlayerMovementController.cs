@@ -148,10 +148,11 @@ public class PlayerMovementController : MonoBehaviour
     [SerializeField]
     private float dashSpeed = 10.0f;
     [SerializeField]
+    private float dashRate = 3.0f;
+    [SerializeField]
     private LayerMask layerForPicking;
 
     private float decelerationRate = 2.0f;
-    private float dashRate = 3.0f;
 
     private bool canDash = true;
 

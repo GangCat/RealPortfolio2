@@ -29,12 +29,6 @@ public class BossAttackAreaCollider : MonoBehaviour
         myCollider = GetComponent<Collider>();
     }
 
-    protected virtual void Start()
-    {
-        //myCollider.enabled = false;
-    }
-
-
     protected virtual void OnTriggerEnter(Collider _other)
     {
         if (_other.CompareTag("Player"))

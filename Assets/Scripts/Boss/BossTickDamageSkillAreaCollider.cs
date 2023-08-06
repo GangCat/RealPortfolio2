@@ -15,6 +15,11 @@ public class BossTickDamageSkillAreaCollider : BossAttackAreaCollider
         lastDamageTime = TickDelayTime;
     }
 
+    protected override void OnTriggerEnter(Collider _other)
+    {
+
+    }
+
     protected virtual void OnTriggerStay(Collider _other)
     {
         if (_other.CompareTag("Player"))

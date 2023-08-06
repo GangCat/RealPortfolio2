@@ -51,10 +51,6 @@ public class Boss03Attack01AreaCollider : BossAttackAreaCollider
     {
     }
 
-    protected override void Start()
-    {
-    }
-
 
     private bool isFirstCall = true;
 

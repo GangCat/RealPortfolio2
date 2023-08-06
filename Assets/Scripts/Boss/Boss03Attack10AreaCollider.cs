@@ -11,17 +11,17 @@ public class Boss03Attack10AreaCollider : BossAttackAreaCollider
 
     private void PrintWarnArea()
     {
-        GetComponent<MeshRenderer>().enabled = true;
+        GetComponent<SpriteRenderer>().enabled = true;
     }
 
     private void Update()
     {
-        if(GetComponent<MeshRenderer>().enabled == false)
+        if(GetComponent<SpriteRenderer>().enabled == false)
             GetComponentInParent<BossFSM>().Rotate();
     }
 
     private void OnDisable()
     {
-        GetComponent<MeshRenderer>().enabled = false;
+        GetComponent<SpriteRenderer>().enabled = false;
     }
 }

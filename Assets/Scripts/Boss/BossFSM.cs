@@ -32,6 +32,7 @@ public class BossFSM : MonoBehaviour
             {
                 ChangeState(EBossState.Idle);
                 StartCoroutine("CalcSkillDelay");
+                StartCoroutine("CalcUltSkillDelay");
                 yield break;
             }
         }
@@ -68,6 +69,7 @@ public class BossFSM : MonoBehaviour
             sqrDist = CalcDistanceToTarget(moveDir);
             ChangeStateWithDistance(sqrDist);
 
+            Rotate();
             Move(moveDir);
             yield return null;
         }
@@ -239,7 +241,17 @@ public class BossFSM : MonoBehaviour
 
     private void ChangeStateWithDistance(float _sqrDist)
     {
-        if (_sqrDist > Mathf.Pow(bossAttackSetting.longRangeAttackRange, 2.0f))
+        if (_sqrDist > Mathf.Pow(bossAttackSetting.ultAttackRange, 2.0f))
+        {
+            return;
+        }
+        else if (bossAttackSetting.hasUltSkill && timeAfterUltSkillAttack > bossAttackSetting.UltSkillDelayTime)
+        {
+            bossAnim.SetBool("isBossRun", false);
+            ChangeState(EBossState.UltSkillAttack);
+            return;
+        }
+        else if (_sqrDist > Mathf.Pow(bossAttackSetting.longRangeAttackRange, 2.0f))
         {
             if (bossAttackSetting.hasUltSkill)
                 if (timeAfterUltSkillAttack > bossAttackSetting.UltSkillDelayTime)
@@ -301,11 +313,14 @@ public class BossFSM : MonoBehaviour
 
     private void OnDrawGizmos()
     {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(transform.position, bossAttackSetting.closeRangeAttackRange);
+
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, bossAttackSetting.longRangeAttackRange);
 
-        Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(transform.position, bossAttackSetting.closeRangeAttackRange);
+        Gizmos.color = Color.blue;
+        Gizmos.DrawWireSphere(transform.position, bossAttackSetting.ultAttackRange);
     }
 
 
