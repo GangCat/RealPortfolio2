@@ -18,10 +18,7 @@ public class BossBirthController : MonoBehaviour
 
             ++bossIdx;
         }
-
     }
-
-
 
 
     [SerializeField]

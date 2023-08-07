@@ -6,8 +6,9 @@ public class ItemDamageBuff : ItemBase
 {
     public override void Use(GameObject _entity)
     {
-        if(_entity.GetComponentInChildren<WeaponAssaultRifle>() != null)
+        if (_entity.GetComponentInChildren<WeaponAssaultRifle>() != null)
             _entity.GetComponentInChildren<WeaponAssaultRifle>().ChangeDmg(changeDmgRatio, duration);
+
         Destroy(gameObject);
     }
 

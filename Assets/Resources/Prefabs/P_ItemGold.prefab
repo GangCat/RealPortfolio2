@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 1931988187549015243}
   - component: {fileID: 7335221934758001123}
   - component: {fileID: 982970264235251972}
-  - component: {fileID: 7134940294959617201}
+  - component: {fileID: 478209608}
   m_Layer: 14
-  m_Name: P_TempItemSpeedBuff
+  m_Name: P_ItemGold
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: f219dbcf5cf55304b929bf165c46d1bb, type: 2}
+  - {fileID: 2100000, guid: 0383dcbf777f1a24ba4d89818a3c573a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -98,7 +98,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7134940294959617201
+--- !u!114 &478209608
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,11 +107,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8870151948775833121}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa42be28b8ca5244cad10c7409e33eba, type: 3}
+  m_Script: {fileID: 11500000, guid: bc026f6dd402a7f4aba840d0afc4f9df, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveDistance: 0.2
   pingpongSpeed: 0.5
   rotSpeed: 50
-  changeSpeedRatio: 1.5
-  duration: 10
+  increaseGold: 50

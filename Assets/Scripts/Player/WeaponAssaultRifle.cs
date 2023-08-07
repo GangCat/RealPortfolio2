@@ -5,27 +5,36 @@ using UnityEngine;
 
 [System.Serializable]
 public class AmmoEvent : UnityEngine.Events.UnityEvent<float> { }
+public class DmgEvent : UnityEngine.Events.UnityEvent<float> { }
+public class AttacRateEvent : UnityEngine.Events.UnityEvent<float> { }
+public class AttributeDmgEvent : UnityEngine.Events.UnityEvent<float[]> { }
 public enum EWeaponState { None = -1, Idle, Attack, Reload }
 public class WeaponAssaultRifle : MonoBehaviour
 {
     [HideInInspector]
     public AmmoEvent onAmmoEvent = new AmmoEvent();
+    public DmgEvent onDmgEvent = new DmgEvent();
+    public AttacRateEvent onAttackRateEvent = new AttacRateEvent();
+    public AttributeDmgEvent onAttributeDmgEvent = new AttributeDmgEvent();
     public bool IsReload => isReload;
     public bool IsAttack => isAttack;
+    public float Dmg => weaponSetting.dmg;
+    public float AttackRate => weaponSetting.attackRate;
+    public float[] AttributeDmgs => weaponSetting.attributeDmgs;
+
     public Vector3 HitPoint { get => hitPoint; set => hitPoint = value; }
 
+    #region ChangeDmg
     public void ChangeDmg(float _ratio, float _duration)
     {
-        if (isBuff)
+        if (isDmgBuff)
             StopCoroutine("ResetDmg");
 
-        isBuff = true;
-        float prevDmg = weaponSetting.dmg;
+        isDmgBuff = true;
 
-        weaponSetting.dmg = oriDmg * _ratio > weaponSetting.maxDmg ? weaponSetting.maxDmg : oriDmg * _ratio;
+        weaponSetting.dmg = weaponSetting.dmg * _ratio > weaponSetting.maxDmg ? weaponSetting.maxDmg : weaponSetting.dmg * _ratio;
 
-        if (prevDmg > weaponSetting.dmg)
-            weaponSetting.dmg = prevDmg;
+        onDmgEvent.Invoke(weaponSetting.dmg);
 
         StartCoroutine("ResetDmg", _duration);
     }
@@ -35,8 +44,75 @@ public class WeaponAssaultRifle : MonoBehaviour
         yield return new WaitForSeconds(_duration);
 
         weaponSetting.dmg = oriDmg;
-        isBuff = false;
+        onDmgEvent.Invoke(weaponSetting.dmg);
+        isDmgBuff = false;
     }
+    #endregion
+
+    #region ChangeAttackRate
+    public void ChangeAttackRate(float _ratio, float _duration)
+    {
+        if (isAttackRateBuff)
+            StopCoroutine("ResetAttackRate");
+
+        isAttackRateBuff = true;
+
+        weaponSetting.attackRate = weaponSetting.attackRate * _ratio < weaponSetting.minAttackRate ? weaponSetting.minAttackRate : weaponSetting.attackRate * _ratio;
+
+        onAttackRateEvent.Invoke(weaponSetting.attackRate);
+
+        StartCoroutine("ResetAttackRate", _duration);
+    }
+
+    private IEnumerator ResetAttackRate(float _duration)
+    {
+        yield return new WaitForSeconds(_duration);
+
+        weaponSetting.attackRate = oriAttackRate;
+        onAttackRateEvent.Invoke(weaponSetting.attackRate);
+        isAttackRateBuff = false;
+    }
+    #endregion
+
+    #region ChangeAttributeDmgs
+    public void ChangeAttributeDmgs(float _ratio, float _duration)
+    {
+        if (isAttributeDmgBuff)
+            StopCoroutine("ResetAttributeDmgs");
+
+        isAttributeDmgBuff = true;
+
+
+        for (int i = 0; i < weaponSetting.attributeDmgs.Length; ++i)
+        {
+            weaponSetting.attributeDmgs[i] =
+                weaponSetting.attributeDmgs[i] * _ratio > weaponSetting.maxAttributeDmg ?
+                weaponSetting.maxAttributeDmg :
+                weaponSetting.attributeDmgs[i] * _ratio;
+        }
+
+
+        onAttributeDmgEvent.Invoke(weaponSetting.attributeDmgs);
+
+        StartCoroutine("ResetAttributeDmgs", _duration);
+    }
+
+    private IEnumerator ResetAttributeDmgs(float _duration)
+    {
+        yield return new WaitForSeconds(_duration);
+
+        for (int i = 0; i < weaponSetting.attributeDmgs.Length; ++i)
+            weaponSetting.attributeDmgs[i] = oriAttributeDmgs[i];
+
+        onAttributeDmgEvent.Invoke(weaponSetting.attributeDmgs);
+
+        isAttributeDmgBuff = false;
+    }
+
+
+
+
+    #endregion
 
     public void ChangeState(EWeaponState _newState)
     {
@@ -80,7 +156,7 @@ public class WeaponAssaultRifle : MonoBehaviour
             playerAnim.PlayAttack();
 
             isAttack = true;
-            if(prevIsAttack != isAttack)
+            if (prevIsAttack != isAttack)
                 yield return null;
 
             StartCoroutine("OnMuzzleEffect");
@@ -150,7 +226,13 @@ public class WeaponAssaultRifle : MonoBehaviour
         weaponSetting.curAmmo = weaponSetting.maxAmmo;
         onAmmoEvent.Invoke(weaponSetting.curAmmo);
         EffectMuzzle.SetActive(false);
+
         oriDmg = weaponSetting.dmg;
+        oriAttackRate = weaponSetting.attackRate;
+        oriAttributeDmgs = new float[weaponSetting.attributeDmgs.Length];
+
+        for (int i = 0; i < weaponSetting.attributeDmgs.Length; ++i)
+            oriAttributeDmgs[i] = weaponSetting.attributeDmgs[i];
     }
 
     private void OnEnable()
@@ -179,9 +261,14 @@ public class WeaponAssaultRifle : MonoBehaviour
 
     private bool isReload = false;
     private bool isAttack = false;
-    private bool isBuff = false;
+
+    private bool isDmgBuff = false;
+    private bool isAttackRateBuff = false;
+    private bool isAttributeDmgBuff = false;
 
     private float oriDmg = 0;
+    private float oriAttackRate = 0;
+    private float[] oriAttributeDmgs;
 
     private PlayerAnimatorController playerAnim = null;
     private ProjectileMemoryPool projectileMemoryPool = null;

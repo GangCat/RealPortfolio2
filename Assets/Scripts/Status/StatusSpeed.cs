@@ -2,8 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public class SpeedEvent : UnityEngine.Events.UnityEvent<float, float> { }
 public class StatusSpeed : MonoBehaviour
 {
+    public SpeedEvent onSpeedEvent = new SpeedEvent();
     public float RunSpeed => runSpeed;
     public float WalkSpeed => walkSpeed;
 
@@ -13,16 +15,11 @@ public class StatusSpeed : MonoBehaviour
             StopCoroutine("ResetSpeed");
 
         isBuff = true;
-        float prevWalkSpeed = walkSpeed;
-        float prevRunSpeed = runSpeed;
 
-        walkSpeed = oriWalkSpeed * _ratio > maxWalkSpeed ? maxWalkSpeed : oriWalkSpeed * _ratio;
-        runSpeed = oriRunSpeed * _ratio > maxRunSpeed ? maxRunSpeed : oriRunSpeed * _ratio;
+        walkSpeed = walkSpeed * _ratio > maxWalkSpeed ? maxWalkSpeed : walkSpeed * _ratio;
+        runSpeed = runSpeed * _ratio > maxRunSpeed ? maxRunSpeed : runSpeed * _ratio;
 
-        if (prevWalkSpeed > walkSpeed)
-            walkSpeed = prevWalkSpeed;
-        if (prevRunSpeed > runSpeed)
-            runSpeed = prevRunSpeed;
+        onSpeedEvent.Invoke(walkSpeed, runSpeed);
 
         StartCoroutine("ResetSpeed", _duration);
     }
@@ -33,6 +30,8 @@ public class StatusSpeed : MonoBehaviour
 
         runSpeed = oriRunSpeed;
         walkSpeed = oriWalkSpeed;
+
+        onSpeedEvent.Invoke(walkSpeed, runSpeed);
         isBuff = false;
     }
 

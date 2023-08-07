@@ -4,10 +4,12 @@ using UnityEngine;
 
 [System.Serializable]
 public class HPEvent : UnityEngine.Events.UnityEvent<float, float> { }
+public class MaxHpEvent : UnityEngine.Events.UnityEvent<float> { }
 public class StatusHP : MonoBehaviour
 {
     [HideInInspector]
     public HPEvent onHPEvent = new HPEvent();
+    public MaxHpEvent onMaxHpEvent = new MaxHpEvent();
     public float CurHP => curHP;
     public float MaxHP => maxHP;
 
@@ -15,6 +17,11 @@ public class StatusHP : MonoBehaviour
     {
         // 공격 받기 전 HP
         float prevHP = curHP;
+
+        if(statusDefense != null)
+            _dmg = statusDefense.DefenseDmg(_dmg);
+
+        //float defense = 
 
         curHP -= (_dmg > 0 ? _dmg : 0);
 
@@ -43,6 +50,12 @@ public class StatusHP : MonoBehaviour
         onHPEvent.Invoke(prevHP, curHP);
     }
 
+    public void ChangeMaxHP(float _ratio)
+    {
+        maxHP = maxHP * _ratio;
+        onMaxHpEvent.Invoke(maxHP);
+    }
+
     public float GetRatio()
     {
         return curHP / maxHP;
@@ -53,9 +66,23 @@ public class StatusHP : MonoBehaviour
         curHP = maxHP;
     }
 
+    private void Start()
+    {
+        oriMaxHp = maxHP;
+    }
+
+    private void Awake()
+    {
+        statusDefense = GetComponent<StatusDefense>();
+    }
+
     [Header("-HP")]
     [SerializeField]
     private float curHP = 100;
     [SerializeField]
     private float maxHP = 200;
+
+    private StatusDefense statusDefense;
+
+    private float oriMaxHp;
 }

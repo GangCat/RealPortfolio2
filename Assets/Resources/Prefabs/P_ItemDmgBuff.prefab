@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 1931988187549015243}
   - component: {fileID: 7335221934758001123}
   - component: {fileID: 982970264235251972}
-  - component: {fileID: 4336082741794435994}
+  - component: {fileID: 1238743730335408642}
   m_Layer: 14
-  m_Name: P_TempItemHealthPotion
+  m_Name: P_ItemDmgBuff
   m_TagString: Item
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 13e5eb820e0c4c046ba51b9e4d13f362, type: 2}
+  - {fileID: 2100000, guid: e60ab234f6f11a74fa2ca0f68d098da3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -98,7 +98,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4336082741794435994
+--- !u!114 &1238743730335408642
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -107,11 +107,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 8870151948775833121}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 877393c72a5200b41bdba35fb7fd01f3, type: 3}
+  m_Script: {fileID: 11500000, guid: 253c6f2b626e60146ac7cc4698e16374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   moveDistance: 0.2
   pingpongSpeed: 0.5
   rotSpeed: 50
-  healthEffectPrefab: {fileID: 0}
-  increaseHP: 50
+  changeDmgRatio: 1.5
