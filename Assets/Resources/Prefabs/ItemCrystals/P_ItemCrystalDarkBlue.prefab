@@ -102,7 +102,7 @@ MonoBehaviour:
   pingpongSpeed: 0.5
   rotSpeed: 50
   crystalInfo:
-    mySprite: {fileID: 21300000, guid: e7c18f42382449e40a9340bc3f951172, type: 3}
+    mySprite: {fileID: 21300000, guid: b9411f6b459b0e144a0dab1f914bc958, type: 3}
     myCategory: 1
     myColor: 5
     increaseAttackDmg: 0

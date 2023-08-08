@@ -5,79 +5,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-// 열거형으로 크리스탈의 스프라이트의 순번 메김
-// 해당 아이템은 각자의 순번을 지니고 있고 use에서 자신의 순번을 반환함.
-public enum ECrystalCategory 
-{ None = -1, 
-    Slot1, 
-    Slot2, 
-    Slot3, 
-    Slot4, 
-    Presize 
-}
-
-public enum ECrystalColor
-{
-    Red = 0, Purple, Lilac,
-    Lightblue, Blue, Darkblue,
-    Yellow, Green, Emerald,
-    Pink, Violet,LightViolet
-}
 
 public class PlayerStatusUIManager : MonoBehaviour
 {
-    public GameObject EquipCrystal(ItemCrystal _crystal)
-    {
-        int prevIdx = imageCrystalSlot[(int)_crystal.crystalInfo.myCategory].PrevCrystalIdx;
-
-        if (prevIdx == (int)_crystal.crystalInfo.myCategory) // 끼고있는 녀석을 다시 끼려고 하면 등업
-        {
-            ++crystalPrefabs[prevIdx].GetComponent<ItemCrystal>().MyRank;
-            SetStatus(_crystal.crystalInfo, crystalPrefabs[prevIdx].GetComponent<ItemCrystal>().MyRank);
-            // 등업을 표시해주는 그림 혹은 글자
-            return null;
-        }
-        else if (prevIdx < 12)
-        {
-            if (crystalPrefabs[prevIdx].GetComponent<ItemCrystal>().MyRank > 1) // 끼고있는 녀석이 2등급인데 새로운 녀석을 끼려고 하면
-            {
-                crystalPrefabs[prevIdx].GetComponent<ItemCrystal>().MyRank = 1; // 등급 1로 초기화
-            }
-        }
-
-        imageCrystalSlot[(int)_crystal.crystalInfo.myCategory].ChangeCrystal((int)_crystal.crystalInfo.myColor);
-        SetStatus(_crystal.crystalInfo, _crystal.crystalInfo.myRank);
-
-        return prevIdx < 12 ? crystalPrefabs[prevIdx] : null;
-    }
-
-    private void SetStatus(SCrystalInfo _crystalInfo, int rank)
-    {
-        switch (_crystalInfo.myCategory)
-        {
-            case ECrystalCategory.None:
-                break;
-            case ECrystalCategory.Slot1:
-                weapon.ChangeDmg(_crystalInfo.increaseAttackDmg * rank);
-                weapon.ChangeAttackRate(_crystalInfo.ratioAttackRate * rank);
-                break;
-            case ECrystalCategory.Slot2:
-                player.GetComponent<StatusSkill>().ChangeSkillDmgs(_crystalInfo.increaseSkillDmg * rank);
-                player.GetComponent<StatusSkill>().ChangeSkillCooltimes(_crystalInfo.ratioSkillRate * rank);
-                break;
-            case ECrystalCategory.Slot3:
-                player.GetComponent<StatusHP>().ChangeMaxHp(_crystalInfo.increaseMaxHp * rank);
-                player.GetComponent<StatusDefense>().ChangeDefense(_crystalInfo.increaseDefense * rank);
-                player.GetComponent<StatusSpeed>().ChangeSpeed(_crystalInfo.ratioMoveSpeed * rank);
-                break;
-            case ECrystalCategory.Slot4:
-                player.GetComponent<StatusDefense>().ChangeAttributeDefenses(_crystalInfo.increaseAttributeDefense * rank);
-                weapon.ChangeAttributeDmgs(_crystalInfo.increaseAttributeDmg * rank);
-                break;
-            case ECrystalCategory.Presize:
-                break;
-        }
-    }
     private void Awake()
     {
         weapon = player.GetComponentInChildren<WeaponAssaultRifle>();
@@ -281,10 +211,6 @@ public class PlayerStatusUIManager : MonoBehaviour
     }
 
 
-    [Header("-Inventory Equip Item Slot")]
-    [SerializeField]
-    private ImageCrystalSlot[] imageCrystalSlot;
-
     [Header("-Status Text")]
     [SerializeField]
     private TextMeshProUGUI textMaxHp;
@@ -318,11 +244,7 @@ public class PlayerStatusUIManager : MonoBehaviour
     [SerializeField]
     private GameObject player;
 
-    [SerializeField]
-    private GameObject[] crystalPrefabs;
-
     private WeaponAssaultRifle weapon;
     
-
     private bool isInvenOpen = false;
 }

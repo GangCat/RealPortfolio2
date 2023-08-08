@@ -12,7 +12,7 @@ public class ItemCrystal : ItemBase
     }
     private void Awake()
     {
-        statusUIManager = GetComponentInParent<PlayerStatusUIManager>();
+        crystalManager = GetComponentInParent<CrystalManager>();
     }
 
     private void OnEnable()
@@ -29,14 +29,14 @@ public class ItemCrystal : ItemBase
     {
         if (_entity.CompareTag("Player"))
         {
-            GameObject tempGo = statusUIManager.EquipCrystal(this);
+            GameObject tempGo = crystalManager.EquipCrystal(this);
             if (tempGo == null)
             {
                 Destroy(gameObject);
                 return;
             }
 
-            GameObject crystalGo = Instantiate(tempGo, statusUIManager.transform);
+            GameObject crystalGo = Instantiate(tempGo, crystalManager.transform);
 
             if (crystalGo == null)
                 Destroy(gameObject);
@@ -59,7 +59,9 @@ public class ItemCrystal : ItemBase
         }
     }
 
-    private PlayerStatusUIManager statusUIManager;
+    //private PlayerStatusUIManager statusUIManager;
+
+    private CrystalManager crystalManager;
 
     public SCrystalInfo crystalInfo;
 }
