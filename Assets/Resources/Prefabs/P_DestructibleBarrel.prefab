@@ -14,9 +14,9 @@ GameObject:
   - component: {fileID: 7279693437545722206}
   - component: {fileID: 7279693437545722178}
   - component: {fileID: 7279693437545722179}
-  m_Layer: 8
+  m_Layer: 3
   m_Name: P_DestructibleBarrel
-  m_TagString: Interactive
+  m_TagString: Destructible
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 1
   m_StaticEditorFlags: 8
@@ -116,6 +116,7 @@ MonoBehaviour:
   - {fileID: 8870151948775833121, guid: 42f7b263cafc6a94e959a4aeb774df45, type: 3}
   - {fileID: 8870151948775833121, guid: 30eec3422ddbab84381ad071097f336b, type: 3}
   - {fileID: 8870151948775833121, guid: cfeb9808a16420f40958c7ccb5891e06, type: 3}
+  - {fileID: 1190587027235668133, guid: 7dfea13123348784cb460c0cf712d65e, type: 3}
 --- !u!114 &7279693437545722179
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -131,5 +132,5 @@ MonoBehaviour:
   onHPEvent:
     m_PersistentCalls:
       m_Calls: []
-  curHP: 100
-  maxHP: 100
+  curHp: 100
+  maxHp: 200

@@ -6,7 +6,7 @@ public class EnemyController : MonoBehaviour
 {
     public void TakeDmg(float _dmg)
     {
-        if (statusHp.DecreaseHP(_dmg))
+        if (statusHp.DecreaseHp(_dmg))
         {
             StartCoroutine("LerpAxisY");
             StopCoroutine("FindPath");

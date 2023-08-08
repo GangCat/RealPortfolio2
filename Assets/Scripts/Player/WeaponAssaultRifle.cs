@@ -24,8 +24,8 @@ public class WeaponAssaultRifle : MonoBehaviour
 
     public Vector3 HitPoint { get => hitPoint; set => hitPoint = value; }
 
-    #region ChangeDmg
-    public void ChangeDmg(float _ratio, float _duration)
+    #region BuffDmg
+    public void BuffDmg(float _ratio, float _duration)
     {
         if (isDmgBuff)
             StopCoroutine("ResetDmg");
@@ -49,8 +49,8 @@ public class WeaponAssaultRifle : MonoBehaviour
     }
     #endregion
 
-    #region ChangeAttackRate
-    public void ChangeAttackRate(float _ratio, float _duration)
+    #region BuffAttackRate
+    public void BuffAttackRate(float _ratio, float _duration)
     {
         if (isAttackRateBuff)
             StopCoroutine("ResetAttackRate");
@@ -74,8 +74,8 @@ public class WeaponAssaultRifle : MonoBehaviour
     }
     #endregion
 
-    #region ChangeAttributeDmgs
-    public void ChangeAttributeDmgs(float _ratio, float _duration)
+    #region BuffAttributeDmgs
+    public void BuffAttributeDmgs(float _ratio, float _duration)
     {
         if (isAttributeDmgBuff)
             StopCoroutine("ResetAttributeDmgs");
@@ -108,11 +108,32 @@ public class WeaponAssaultRifle : MonoBehaviour
 
         isAttributeDmgBuff = false;
     }
-
-
-
-
     #endregion
+
+    public void ChangeDmg(float _increaseDmg)
+    {
+        weaponSetting.dmg = oriDmg + _increaseDmg;
+
+        onDmgEvent.Invoke(weaponSetting.dmg);
+    }
+
+    public void ChangeAttackRate(float _ratioAttackRate)
+    {
+        weaponSetting.attackRate = oriAttackRate * (1 - _ratioAttackRate);
+
+        onAttackRateEvent.Invoke(weaponSetting.attackRate);
+    }
+
+    public void ChangeAttributeDmgs(float _increaseAttributeDmg)
+    {
+        for (int i = 0; i < weaponSetting.attributeDmgs.Length; ++i)
+        {
+            weaponSetting.attributeDmgs[i] =
+                oriAttributeDmgs[i] + _increaseAttributeDmg;
+        }
+
+        onAttributeDmgEvent.Invoke(weaponSetting.attributeDmgs);
+    }
 
     public void ChangeState(EWeaponState _newState)
     {

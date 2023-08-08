@@ -6,7 +6,7 @@ public class BossCollider : MonoBehaviour
 {
     public void TakeDmg(float _dmg)
     {
-        if (statusHp.DecreaseHP(_dmg))
+        if (statusHp.DecreaseHp(_dmg))
         {
             Debug.Log(gameObject.name);
             bossFsm.ChangeState(BossFSM.EBossState.Dead);

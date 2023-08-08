@@ -11,8 +11,8 @@ public class StatusSkill : MonoBehaviour
     public float[] SkillDmgs => skillDmgs;
     public float[] SkillCooltimes => skillCooltimes;
 
-
-    public void ChangeSkillDmgs(float _ratio, float _duration)
+    #region BuffSkillDmgs
+    public void BuffSkillDmgs(float _ratio, float _duration)
     {
         if (isSkillDmgBuff)
             StopCoroutine("ResetSkillDmgs");
@@ -38,8 +38,10 @@ public class StatusSkill : MonoBehaviour
         onSkillDmgEvent.Invoke(skillDmgs);
         isSkillDmgBuff = false;
     }
+    #endregion
 
-    public void ChangeSkillCooltimes(float _ratio, float _duration)
+    #region BuffSkillCool
+    public void BuffSkillCooltimes(float _ratio, float _duration)
     {
         if (isSkillCooltimeBuff)
             StopCoroutine("ResetSkillCooltimes");
@@ -63,6 +65,23 @@ public class StatusSkill : MonoBehaviour
 
         onSkillDmgEvent.Invoke(skillCooltimes);
         isSkillCooltimeBuff = false;
+    }
+    #endregion
+
+    public void ChangeSkillDmgs(float _increaseSkillDmg)
+    {
+        for (int i = 0; i < skillDmgs.Length; ++i)
+            skillDmgs[i] = oriSkillDmgs[i] + _increaseSkillDmg;
+
+        onSkillDmgEvent.Invoke(skillDmgs);
+    }
+
+    public void ChangeSkillCooltimes(float _ratioSkillRate)
+    {
+        for (int i = 0; i < skillCooltimes.Length; ++i)
+            skillCooltimes[i] = oriSkillCooltimes[i] * (1 - _ratioSkillRate);
+
+        onSkillCooltimeEvent.Invoke(skillCooltimes);
     }
 
     private void Start()

@@ -7,7 +7,7 @@ public class ItemAttackRateBuff : ItemBase
     public override void Use(GameObject _entity)
     {
         if (_entity.GetComponentInChildren<WeaponAssaultRifle>() != null)
-            _entity.GetComponentInChildren<WeaponAssaultRifle>().ChangeAttackRate(changeAttackRateRatio, duration);
+            _entity.GetComponentInChildren<WeaponAssaultRifle>().BuffAttackRate(changeAttackRateRatio, duration);
 
         Destroy(gameObject);
     }

@@ -9,7 +9,8 @@ public class StatusSpeed : MonoBehaviour
     public float RunSpeed => runSpeed;
     public float WalkSpeed => walkSpeed;
 
-    public void ChangeSpeed(float _ratio, float _duration)
+    #region BuffSpeed
+    public void BuffSpeed(float _ratio, float _duration)
     {
         if (isBuff)
             StopCoroutine("ResetSpeed");
@@ -33,6 +34,15 @@ public class StatusSpeed : MonoBehaviour
 
         onSpeedEvent.Invoke(walkSpeed, runSpeed);
         isBuff = false;
+    }
+    #endregion
+
+    public void ChangeSpeed(float _ratioSpeed)
+    {
+        walkSpeed = oriWalkSpeed * ( 1 - _ratioSpeed);
+        runSpeed = oriRunSpeed * (1 - _ratioSpeed);
+
+        onSpeedEvent.Invoke(walkSpeed, runSpeed);
     }
 
     private void Start()

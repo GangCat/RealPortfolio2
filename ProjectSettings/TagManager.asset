@@ -12,11 +12,12 @@ TagManager:
   - Item
   - FxTemporaire
   - Boss
+  - Destructible
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Destructible
   - Water
   - UI
   - Base

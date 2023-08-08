@@ -5,11 +5,67 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
+// 열거형으로 크리스탈의 스프라이트의 순번 메김
+// 해당 아이템은 각자의 순번을 지니고 있고 use에서 자신의 순번을 반환함.
+public enum ECrystalCategory 
+{ None = -1, 
+    Slot1, 
+    Slot2, 
+    Slot3, 
+    Slot4, 
+    Presize 
+}
+
+public enum ECrystalColor
+{
+    Red = 0, Purple, Lilac,
+    Lightblue, Blue, Darkblue,
+    Yellow, Green, Emerald,
+    Pink, Violet,LightViolet
+}
 
 public class PlayerStatusUIManager : MonoBehaviour
 {
+    public GameObject EquipCrystal(SCrystalInfo _crystalInfo)
+    {
+        SetStatus(_crystalInfo);
+        int prevIdx = imageCrystalSlot[(int)_crystalInfo.myCategory].PrevCrystalIdx;
+        imageCrystalSlot[(int)_crystalInfo.myCategory].ChangeCrystal((int)_crystalInfo.myColor);
+
+        return prevIdx < 12 ? crystalPrefabs[prevIdx] : null;
+    }
+
+    private void SetStatus(SCrystalInfo _crystalInfo)
+    {
+        switch (_crystalInfo.myCategory)
+        {
+            case ECrystalCategory.None:
+                break;
+            case ECrystalCategory.Slot1:
+                weapon.ChangeDmg(_crystalInfo.increaseAttackDmg);
+                weapon.ChangeAttackRate(_crystalInfo.ratioAttackRate);
+                break;
+            case ECrystalCategory.Slot2:
+                player.GetComponent<StatusSkill>().ChangeSkillDmgs(_crystalInfo.increaseSkillDmg);
+                player.GetComponent<StatusSkill>().ChangeSkillCooltimes(_crystalInfo.ratioSkillRate);
+                break;
+            case ECrystalCategory.Slot3:
+                player.GetComponent<StatusHP>().ChangeMaxHp(_crystalInfo.increaseMaxHp);
+                player.GetComponent<StatusDefense>().ChangeDefense(_crystalInfo.increaseDefense);
+                player.GetComponent<StatusSpeed>().ChangeSpeed(_crystalInfo.ratioMoveSpeed);
+                break;
+            case ECrystalCategory.Slot4:
+                player.GetComponent<StatusDefense>().ChangeAttributeDefenses(_crystalInfo.increaseAttributeDefense);
+                weapon.ChangeAttributeDmgs(_crystalInfo.increaseAttributeDmg);
+                break;
+            case ECrystalCategory.Presize:
+                break;
+        }
+    }
     private void Awake()
     {
+        weapon = player.GetComponentInChildren<WeaponAssaultRifle>();
+
         player.GetComponent<StatusHP>().onMaxHpEvent.AddListener(UpdateMaxHp);
         player.GetComponent<StatusSpeed>().onSpeedEvent.AddListener(UpdateSpeed);
         player.GetComponent<StatusDefense>().onDefenseEvent.AddListener(UpdateDefense);
@@ -17,17 +73,17 @@ public class PlayerStatusUIManager : MonoBehaviour
         player.GetComponent<StatusSkill>().onSkillCooltimeEvent.AddListener(UpdateSkillCooltime);
         player.GetComponent<StatusDefense>().onAttributeDefenseEvent.AddListener(UpdateAttributeDefenses);
 
-        assaultRifle.onDmgEvent.AddListener(UpdateWeaponDmg);
-        assaultRifle.onAttributeDmgEvent.AddListener(UpdateAttributeDmgs);
-        assaultRifle.onAttackRateEvent.AddListener(UpdateWeaponAttackRate);
+        weapon.onDmgEvent.AddListener(UpdateWeaponDmg);
+        weapon.onAttributeDmgEvent.AddListener(UpdateAttributeDmgs);
+        weapon.onAttackRateEvent.AddListener(UpdateWeaponAttackRate);
     }
 
     private void Start()
     {
         StringBuilder sb = new StringBuilder();
 
-        textWeaponDmg.text = assaultRifle.Dmg.ToString();
-        textAttackRate.text = assaultRifle.AttackRate.ToString();
+        textWeaponDmg.text = weapon.Dmg.ToString();
+        textAttackRate.text = weapon.AttackRate.ToString();
 
         textMaxHp.text = player.GetComponent<StatusHP>().MaxHP.ToString();
         textDefense.text = player.GetComponent<StatusDefense>().CurDefense.ToString();
@@ -46,11 +102,11 @@ public class PlayerStatusUIManager : MonoBehaviour
         textMoveSpeed.text = sb.ToString();
         sb.Clear();
 
-        sb.Append(assaultRifle.AttributeDmgs[0].ToString());
+        sb.Append(weapon.AttributeDmgs[0].ToString());
         sb.Append(" / ");
-        sb.Append(assaultRifle.AttributeDmgs[1].ToString());
+        sb.Append(weapon.AttributeDmgs[1].ToString());
         sb.Append(" / ");
-        sb.Append(assaultRifle.AttributeDmgs[2].ToString());
+        sb.Append(weapon.AttributeDmgs[2].ToString());
         textAttributeDmg.text = sb.ToString();
         sb.Clear();
 
@@ -99,7 +155,7 @@ public class PlayerStatusUIManager : MonoBehaviour
         sb.Append(_skillDmg[1].ToString());
         sb.Append(" / ");
         sb.Append(_skillDmg[2].ToString());
-        textSkillCooltime.text = sb.ToString();
+        textSkillDmg.text = sb.ToString();
         sb.Clear();
     }
 
@@ -146,10 +202,9 @@ public class PlayerStatusUIManager : MonoBehaviour
         sb.Append(_skillCooltimes[1].ToString());
         sb.Append(" / ");
         sb.Append(_skillCooltimes[2].ToString());
-        textAttributeDmg.text = sb.ToString();
+        textSkillCooltime.text = sb.ToString();
         sb.Clear();
     }
-
 
     private void Update()
     {
@@ -212,13 +267,7 @@ public class PlayerStatusUIManager : MonoBehaviour
 
     [Header("-Inventory Equip Item Slot")]
     [SerializeField]
-    private Image imageMuzzleSlot;
-    [SerializeField]
-    private Image imageBarrelSlot;
-    [SerializeField]
-    private Image imageScopeSlot;
-    [SerializeField]
-    private Image imageMagazineSlot;
+    private ImageCrystalSlot[] imageCrystalSlot;
 
     [Header("-Status Text")]
     [SerializeField]
@@ -252,10 +301,12 @@ public class PlayerStatusUIManager : MonoBehaviour
     [Header("-Player")]
     [SerializeField]
     private GameObject player;
-    [SerializeField]
-    private WeaponAssaultRifle assaultRifle;
 
+    [SerializeField]
+    private GameObject[] crystalPrefabs;
+
+    private WeaponAssaultRifle weapon;
+    
 
     private bool isInvenOpen = false;
-
 }

@@ -10,65 +10,67 @@ public class StatusHP : MonoBehaviour
     [HideInInspector]
     public HPEvent onHPEvent = new HPEvent();
     public MaxHpEvent onMaxHpEvent = new MaxHpEvent();
-    public float CurHP => curHP;
-    public float MaxHP => maxHP;
+    public float CurHP => curHp;
+    public float MaxHP => maxHp;
 
-    public bool DecreaseHP(float _dmg)
+    public bool DecreaseHp(float _dmg)
     {
         // 공격 받기 전 HP
-        float prevHP = curHP;
+        float prevHP = curHp;
 
         if(statusDefense != null)
             _dmg = statusDefense.DefenseDmg(_dmg);
 
         //float defense = 
 
-        curHP -= (_dmg > 0 ? _dmg : 0);
+        curHp -= (_dmg > 0 ? _dmg : 0);
 
 
-        Debug.Log(this.name + curHP + "/" + maxHP);
+        Debug.Log(this.name + curHp + "/" + maxHp);
 
         // 죽었으면 true 반환
-        if (curHP <= 0)
+        if (curHp <= 0)
         {
-            curHP = 0;
-            onHPEvent.Invoke(prevHP, curHP);
+            curHp = 0;
+            onHPEvent.Invoke(prevHP, curHp);
             return true;
         }
 
-        onHPEvent.Invoke(prevHP, curHP);
+        onHPEvent.Invoke(prevHP, curHp);
 
         return false;
     }
 
-    public void IncreaseHP(float _HP)
+    public void IncreaseHp(float _HP)
     {
-        float prevHP = curHP;
+        float prevHP = curHp;
 
-        curHP = curHP + _HP > maxHP ? maxHP : curHP + _HP;
+        curHp = curHp + _HP > maxHp ? maxHp : curHp + _HP;
 
-        onHPEvent.Invoke(prevHP, curHP);
+        onHPEvent.Invoke(prevHP, curHp);
     }
 
-    public void ChangeMaxHP(float _ratio)
+    public void ChangeMaxHp(float _increaseHp)
     {
-        maxHP = maxHP * _ratio;
-        onMaxHpEvent.Invoke(maxHP);
+        maxHp = oriMaxHp + _increaseHp;
+
+        onMaxHpEvent.Invoke(maxHp);
+        onHPEvent.Invoke(0, curHp);
     }
 
     public float GetRatio()
     {
-        return curHP / maxHP;
+        return curHp / maxHp;
     }
 
     private void OnEnable()
     {
-        curHP = maxHP;
+        curHp = maxHp;
     }
 
     private void Start()
     {
-        oriMaxHp = maxHP;
+        oriMaxHp = maxHp;
     }
 
     private void Awake()
@@ -78,9 +80,9 @@ public class StatusHP : MonoBehaviour
 
     [Header("-HP")]
     [SerializeField]
-    private float curHP = 100;
+    private float curHp = 100;
     [SerializeField]
-    private float maxHP = 200;
+    private float maxHp = 200;
 
     private StatusDefense statusDefense;
 

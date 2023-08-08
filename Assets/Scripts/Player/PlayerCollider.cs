@@ -13,7 +13,7 @@ public class PlayerCollider : MonoBehaviour
     {
         if (!playerAnim.CurAnimationIs("Dash"))
         {
-            if (statusHp.DecreaseHP(_dmg))
+            if (statusHp.DecreaseHp(_dmg))
                 Debug.Log("GameOver");
         }
     }
@@ -26,8 +26,17 @@ public class PlayerCollider : MonoBehaviour
     private void OnTriggerEnter(Collider _other)
     {
         if (_other.CompareTag("Item"))
-        {
             _other.GetComponent<ItemBase>().Use(gameObject);
+    }
+
+    private void OnTriggerStay(Collider _other)
+    {
+        if (_other.CompareTag("Interactive"))
+        {
+            if (GetComponent<PlayerInputManager>().IsInteract)
+                _other.GetComponent<ItemBase>().Use(gameObject);
+            else if (GetComponent<PlayerInputManager>().IsSellCrystal)
+                _other.GetComponent<ItemCrystal>().SellCrystal(gameObject);
         }
     }
 

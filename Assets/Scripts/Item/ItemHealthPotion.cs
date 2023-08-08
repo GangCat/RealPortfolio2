@@ -8,7 +8,7 @@ public class ItemHealthPotion : ItemBase
     {
         if (_entity.GetComponent<StatusHP>() != null)
         {
-            _entity.GetComponent<StatusHP>().IncreaseHP(increaseHP);
+            _entity.GetComponent<StatusHP>().IncreaseHp(increaseHP);
             //Instantiate(healthEffectPrefab, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }

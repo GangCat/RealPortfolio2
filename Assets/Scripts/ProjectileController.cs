@@ -43,10 +43,10 @@ public class ProjectileController : MonoBehaviour
                 SpawnImpact(_collision, -transform.forward);
                 _collision.transform.GetComponent<EnemyController>().TakeDmg(dmg);
             }
-            else if (_collision.transform.CompareTag("Interactive"))
+            else if (_collision.transform.CompareTag("Destructible"))
             {
                 SpawnImpact(_collision, -transform.forward);
-                _collision.transform.GetComponent<InteractiveObject>().TakeDmg(dmg);
+                _collision.transform.GetComponent<DestructibleObject>().TakeDmg(dmg);
             }
             else if (_collision.transform.CompareTag("Player"))
             {
@@ -72,7 +72,6 @@ public class ProjectileController : MonoBehaviour
         if (gameObject != null)
             impactPool.SpawnInit(_collision.GetContact(0).point, _dir);
     }
-
 
     [SerializeField]
     private float moveSpeed = 5.0f;

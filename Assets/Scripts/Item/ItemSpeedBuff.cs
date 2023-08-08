@@ -7,7 +7,7 @@ public class ItemSpeedBuff : ItemBase
     public override void Use(GameObject _entity)
     {
         if (_entity.GetComponent<StatusSpeed>() != null)
-            _entity.GetComponent<StatusSpeed>().ChangeSpeed(changeSpeedRatio, duration);
+            _entity.GetComponent<StatusSpeed>().BuffSpeed(changeSpeedRatio, duration);
         Destroy(gameObject);
     }
 

@@ -9,25 +9,26 @@ public class StatusDefense : MonoBehaviour
     public DefenseEvent onDefenseEvent = new DefenseEvent();
     public AttributeDefenseEvent onAttributeDefenseEvent = new AttributeDefenseEvent();
 
-    public float CurDefense => curDefense;
+    public float CurDefense => defense;
     public float[] AttributeDefenses => attributeDefenses;
 
 
     public float DefenseDmg(float _dmg)
     {
-        return _dmg -= curDefense > 0 ? curDefense : 0;
+        return _dmg -= defense > 0 ? defense : 0;
     }
 
-    public void ChangeDefense(float _ratio, float _duration)
+    #region BuffDefense
+    public void BuffDefense(float _ratio, float _duration)
     {
         if (isDefenseBuff)
             StopCoroutine("ResetDefense");
 
         isDefenseBuff = true;
 
-        curDefense = curDefense * _ratio > maxDefense ? maxDefense : curDefense * _ratio;
+        defense = defense * _ratio > maxDefense ? maxDefense : defense * _ratio;
 
-        onDefenseEvent.Invoke(curDefense);
+        onDefenseEvent.Invoke(defense);
 
         StartCoroutine("ResetDefense", _duration);
     }
@@ -36,13 +37,15 @@ public class StatusDefense : MonoBehaviour
     {
         yield return new WaitForSeconds(_duration);
 
-        curDefense = oriDefense;
+        defense = oriDefense;
 
-        onDefenseEvent.Invoke(curDefense);
+        onDefenseEvent.Invoke(defense);
         isDefenseBuff = false;
     }
+    #endregion
 
-    public void ChangeAttributeDefenses(float _ratio, float _duration)
+    #region BuffAttDefense
+    public void BuffAttributeDefenses(float _ratio, float _duration)
     {
         if (isAttributeDefenseBuff)
             StopCoroutine("ResetAttDefences");
@@ -62,24 +65,41 @@ public class StatusDefense : MonoBehaviour
         yield return new WaitForSeconds(_duration);
 
         for (int i = 0; i < attributeDefenses.Length; ++i)
-            attributeDefenses[i] = oriAttributeDefense[i];
+            attributeDefenses[i] = oriAttributeDefenses[i];
 
         onAttributeDefenseEvent.Invoke(attributeDefenses);
 
         isAttributeDefenseBuff = false;
     }
+    #endregion
+
+    public void ChangeDefense(float _increaseDefense)
+    {
+        defense = oriDefense + _increaseDefense;
+
+        onDefenseEvent.Invoke(defense);
+    }
+
+    public void ChangeAttributeDefenses(float _increaseAttDefense)
+    {
+        for (int i = 0; i < attributeDefenses.Length; ++i)
+            attributeDefenses[i] = oriAttributeDefenses[i] + _increaseAttDefense;
+
+        onAttributeDefenseEvent.Invoke(attributeDefenses);
+    }
+
 
     private void Start()
     {
-        oriDefense = curDefense;
-        oriAttributeDefense = new float[attributeDefenses.Length];
+        oriDefense = defense;
+        oriAttributeDefenses = new float[attributeDefenses.Length];
 
         for (int i = 0; i < attributeDefenses.Length; ++i)
-            oriAttributeDefense[i] = attributeDefenses[i];
+            oriAttributeDefenses[i] = attributeDefenses[i];
     }
 
     [SerializeField]
-    private float curDefense;
+    private float defense;
     [SerializeField]
     private float maxDefense;
     [SerializeField]
@@ -91,5 +111,5 @@ public class StatusDefense : MonoBehaviour
     private bool isAttributeDefenseBuff = false;
 
     private float oriDefense;
-    private float[] oriAttributeDefense;
+    private float[] oriAttributeDefenses;
 }

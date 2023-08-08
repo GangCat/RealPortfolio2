@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerInputManager : MonoBehaviour
 {
+    public bool IsInteract => isInteract;
+    public bool IsSellCrystal => isSellCrystal;
 
     private void Awake()
     {
@@ -27,6 +29,8 @@ public class PlayerInputManager : MonoBehaviour
         x = Input.GetAxis("Horizontal");
         z = Input.GetAxis("Vertical");
         isRun = Input.GetButton("Run");
+        isInteract = Input.GetButton("Interact");
+        isSellCrystal = Input.GetButton("SellItem");
     }
 
     private void UpdateMove()
@@ -78,7 +82,10 @@ public class PlayerInputManager : MonoBehaviour
 
     private float x = 0.0f;
     private float z = 0.0f;
+
     private bool isRun = false;
+    private bool isInteract = false;
+    private bool isSellCrystal = false;
 
     private WeaponAssaultRifle weaponAR = null;
     private PlayerMovementController playerMove = null;
