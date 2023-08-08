@@ -21,5 +21,5 @@ public struct SCrystalInfo
     public float increaseDefense;
     public float increaseAttributeDmg;
     public float increaseAttributeDefense;
-
+    public int myRank;
 }

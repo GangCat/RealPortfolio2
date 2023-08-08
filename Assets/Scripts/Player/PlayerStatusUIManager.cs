@@ -26,37 +26,53 @@ public enum ECrystalColor
 
 public class PlayerStatusUIManager : MonoBehaviour
 {
-    public GameObject EquipCrystal(SCrystalInfo _crystalInfo)
+    public GameObject EquipCrystal(ItemCrystal _crystal)
     {
-        SetStatus(_crystalInfo);
-        int prevIdx = imageCrystalSlot[(int)_crystalInfo.myCategory].PrevCrystalIdx;
-        imageCrystalSlot[(int)_crystalInfo.myCategory].ChangeCrystal((int)_crystalInfo.myColor);
+        int prevIdx = imageCrystalSlot[(int)_crystal.crystalInfo.myCategory].PrevCrystalIdx;
+
+        if (prevIdx == (int)_crystal.crystalInfo.myCategory) // 끼고있는 녀석을 다시 끼려고 하면 등업
+        {
+            ++crystalPrefabs[prevIdx].GetComponent<ItemCrystal>().MyRank;
+            SetStatus(_crystal.crystalInfo, crystalPrefabs[prevIdx].GetComponent<ItemCrystal>().MyRank);
+            // 등업을 표시해주는 그림 혹은 글자
+            return null;
+        }
+        else if (prevIdx < 12)
+        {
+            if (crystalPrefabs[prevIdx].GetComponent<ItemCrystal>().MyRank > 1) // 끼고있는 녀석이 2등급인데 새로운 녀석을 끼려고 하면
+            {
+                crystalPrefabs[prevIdx].GetComponent<ItemCrystal>().MyRank = 1; // 등급 1로 초기화
+            }
+        }
+
+        imageCrystalSlot[(int)_crystal.crystalInfo.myCategory].ChangeCrystal((int)_crystal.crystalInfo.myColor);
+        SetStatus(_crystal.crystalInfo, _crystal.crystalInfo.myRank);
 
         return prevIdx < 12 ? crystalPrefabs[prevIdx] : null;
     }
 
-    private void SetStatus(SCrystalInfo _crystalInfo)
+    private void SetStatus(SCrystalInfo _crystalInfo, int rank)
     {
         switch (_crystalInfo.myCategory)
         {
             case ECrystalCategory.None:
                 break;
             case ECrystalCategory.Slot1:
-                weapon.ChangeDmg(_crystalInfo.increaseAttackDmg);
-                weapon.ChangeAttackRate(_crystalInfo.ratioAttackRate);
+                weapon.ChangeDmg(_crystalInfo.increaseAttackDmg * rank);
+                weapon.ChangeAttackRate(_crystalInfo.ratioAttackRate * rank);
                 break;
             case ECrystalCategory.Slot2:
-                player.GetComponent<StatusSkill>().ChangeSkillDmgs(_crystalInfo.increaseSkillDmg);
-                player.GetComponent<StatusSkill>().ChangeSkillCooltimes(_crystalInfo.ratioSkillRate);
+                player.GetComponent<StatusSkill>().ChangeSkillDmgs(_crystalInfo.increaseSkillDmg * rank);
+                player.GetComponent<StatusSkill>().ChangeSkillCooltimes(_crystalInfo.ratioSkillRate * rank);
                 break;
             case ECrystalCategory.Slot3:
-                player.GetComponent<StatusHP>().ChangeMaxHp(_crystalInfo.increaseMaxHp);
-                player.GetComponent<StatusDefense>().ChangeDefense(_crystalInfo.increaseDefense);
-                player.GetComponent<StatusSpeed>().ChangeSpeed(_crystalInfo.ratioMoveSpeed);
+                player.GetComponent<StatusHP>().ChangeMaxHp(_crystalInfo.increaseMaxHp * rank);
+                player.GetComponent<StatusDefense>().ChangeDefense(_crystalInfo.increaseDefense * rank);
+                player.GetComponent<StatusSpeed>().ChangeSpeed(_crystalInfo.ratioMoveSpeed * rank);
                 break;
             case ECrystalCategory.Slot4:
-                player.GetComponent<StatusDefense>().ChangeAttributeDefenses(_crystalInfo.increaseAttributeDefense);
-                weapon.ChangeAttributeDmgs(_crystalInfo.increaseAttributeDmg);
+                player.GetComponent<StatusDefense>().ChangeAttributeDefenses(_crystalInfo.increaseAttributeDefense * rank);
+                weapon.ChangeAttributeDmgs(_crystalInfo.increaseAttributeDmg * rank);
                 break;
             case ECrystalCategory.Presize:
                 break;

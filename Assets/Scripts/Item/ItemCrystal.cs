@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class ItemCrystal : ItemBase
 {
+    public int MyRank 
+    { 
+        get => crystalInfo.myRank;
+        set => crystalInfo.myRank = value;
+    }
     private void Awake()
     {
         statusUIManager = GetComponentInParent<PlayerStatusUIManager>();
@@ -24,7 +29,7 @@ public class ItemCrystal : ItemBase
     {
         if (_entity.CompareTag("Player"))
         {
-            GameObject tempGo = statusUIManager.EquipCrystal(crystalInfo);
+            GameObject tempGo = statusUIManager.EquipCrystal(this);
             if (tempGo == null)
             {
                 Destroy(gameObject);

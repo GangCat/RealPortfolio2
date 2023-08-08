@@ -114,6 +114,7 @@ MonoBehaviour:
     increaseDefense: 10
     increaseAttributeDmg: 0
     increaseAttributeDefense: 0
+    myRank: 1
 --- !u!65 &3367696857608723282
 BoxCollider:
   m_ObjectHideFlags: 0

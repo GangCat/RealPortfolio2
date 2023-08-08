@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class PlayerAnimatorController : AnimatorControllerBase
 {
-
-
     /// <summary>
     /// 애니메이션의 isWalk와 isRun의 파라미터 값을 결정함.
     /// 이 때 isWalk의 값을 반환해줌.
