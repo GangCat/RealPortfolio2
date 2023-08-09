@@ -13,7 +13,22 @@ public class Tooltip : MonoBehaviour
         ChangeSprite(_itemSprite);
         SetPosition(_pos);
 
+        //gameObject.transform.localScale = Vector3.one * 0.01f;
         gameObject.SetActive(true);
+        StartCoroutine("ShowTooltipAnim");
+    }
+
+    private IEnumerator ShowTooltipAnim()
+    {
+        float percent = 0.0f;
+        float curTime = Time.time;
+
+        while(percent < 1)
+        {
+            percent = (Time.time - curTime) / 0.25f;
+            gameObject.transform.localScale = Vector3.Lerp(new Vector3(1f, 0.01f, 1f), new Vector3(1f, 1f, 1f), percent);
+            yield return null;
+        }
     }
 
     public void UpdateTooltipPos(Vector2 _pos)
@@ -23,16 +38,9 @@ public class Tooltip : MonoBehaviour
 
     public void HideTooltip()
     {
+        StopCoroutine("ShowTooltipAnim");
         gameObject.SetActive(false);
     }
-
-    public void UpdateTooltipInfo(string _itemInfo, string _itemStatus, Sprite _itemSprite)
-    {
-        EditInfoText(_itemInfo);
-        EditStatusText(_itemStatus);
-        ChangeSprite(_itemSprite);
-    }
-
 
 
     private void EditInfoText(string _textInfo)

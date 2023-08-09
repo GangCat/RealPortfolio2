@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3367696857608723293}
   - component: {fileID: 3367696857608723292}
   - component: {fileID: 3367696857608723295}
-  - component: {fileID: 3367696857608723282}
+  - component: {fileID: 3952703105247233128}
   m_Layer: 14
   m_Name: P_ItemCrystal3Green
   m_TagString: Interactive
@@ -119,8 +119,8 @@ MonoBehaviour:
     itemStatus: 'Defense +10
 
       Move Speed + 15%'
---- !u!65 &3367696857608723282
-BoxCollider:
+--- !u!135 &3952703105247233128
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -130,5 +130,5 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 0
   serializedVersion: 2
-  m_Size: {x: 3, y: 1, z: 3}
+  m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}

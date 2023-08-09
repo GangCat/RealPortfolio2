@@ -19,11 +19,6 @@ public class PanelEquipUI : MonoBehaviour
         tooltipPrefab.GetComponent<Tooltip>().HideTooltip();
     }
 
-    public void UpdateTooltipInfo(string _itemInfo, string _itemStatus, Sprite _itemSprite)
-    {
-        tooltipPrefab.GetComponent<Tooltip>().UpdateTooltipInfo(_itemInfo, _itemStatus, _itemSprite);
-    }
-
     [SerializeField]
     private GameObject tooltipPrefab;
 }

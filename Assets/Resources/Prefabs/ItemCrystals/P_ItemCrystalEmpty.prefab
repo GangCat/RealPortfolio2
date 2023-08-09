@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3367696857608723293}
   - component: {fileID: 3367696857608723292}
   - component: {fileID: 3367696857608723295}
-  - component: {fileID: 3367696857608723282}
+  - component: {fileID: -8370981401116893156}
   m_Layer: 14
   m_Name: P_ItemCrystalEmpty
   m_TagString: Interactive
@@ -118,8 +118,8 @@ MonoBehaviour:
     itemInfo: "\uBCF4\uC11D\uC744 \uC7A5\uCC29\uD560 \uC218 \uC788\uC2B5\uB2C8\uB2E4."
     itemStatus: "\uAC01 \uBCF4\uC11D\uC758 \uC2A4\uD14C\uC774\uD130\uC2A4 \uC99D\uAC00\uB7C9\uC774
       \uD45C\uC2DC\uB429\uB2C8\uB2E4."
---- !u!65 &3367696857608723282
-BoxCollider:
+--- !u!135 &-8370981401116893156
+SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -129,5 +129,5 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 0
   serializedVersion: 2
-  m_Size: {x: 3, y: 1, z: 3}
+  m_Radius: 2
   m_Center: {x: 0, y: 0, z: 0}

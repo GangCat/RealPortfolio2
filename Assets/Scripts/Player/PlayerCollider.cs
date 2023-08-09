@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerCollider : MonoBehaviour
@@ -50,4 +51,6 @@ public class PlayerCollider : MonoBehaviour
     private Collider myCollider = null;
     private StatusHP statusHp = null;
     private PlayerAnimatorController playerAnim = null;
+
+    private bool isSelected = false;
 }

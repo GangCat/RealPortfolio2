@@ -52,7 +52,7 @@ public class CrystalManager : MonoBehaviour
             }
 
             SetStatus(_crystal.crystalInfo, crystalRankArr[(int)_crystal.crystalInfo.myColor]);
-            imageCrystalSlots[(int)_crystal.crystalInfo.myCategory].GetComponentInChildren<ImageCrystalRank>().SetRank(crystalRankArr[(int)_crystal.crystalInfo.myColor]);
+            imageCrystalSlots[(int)_crystal.crystalInfo.myCategory].GetComponentInChildren<TextCrystalRank>().SetRank(crystalRankArr[(int)_crystal.crystalInfo.myColor]);
             return null;
         }
         else if (prevIdx < 12)
@@ -60,7 +60,7 @@ public class CrystalManager : MonoBehaviour
             if (crystalRankArr[prevIdx] > 1) // 끼고있는 녀석이 2등급인데 새로운 녀석을 끼려고 하면
             {
                 crystalRankArr[prevIdx] = 1; // 등급 1로 초기화
-                imageCrystalSlots[(int)_crystal.crystalInfo.myCategory].GetComponentInChildren<ImageCrystalRank>().SetRank(crystalRankArr[(int)_crystal.crystalInfo.myColor]);
+                imageCrystalSlots[(int)_crystal.crystalInfo.myCategory].GetComponentInChildren<TextCrystalRank>().SetRank(crystalRankArr[(int)_crystal.crystalInfo.myColor]);
             }
         }
 

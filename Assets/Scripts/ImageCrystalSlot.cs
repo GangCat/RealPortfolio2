@@ -12,13 +12,14 @@ public class ImageCrystalSlot : MonoBehaviour, IPointerEnterHandler, IPointerExi
     {
         image.sprite = crystalPrefabs[_crystalIdx].GetComponent<SpriteRenderer>().sprite;
         prevCrystalIdx = _crystalIdx;
-        UpdateTooltipInfo();
+        StartCoroutine("ResetTooltip");
     }
 
-    private void UpdateTooltipInfo()
+    private IEnumerator ResetTooltip()
     {
-        SCrystalInfo info = crystalPrefabs[prevCrystalIdx].GetComponent<ItemCrystal>().crystalInfo;
-        panel.UpdateTooltipInfo(info.itemInfo, info.itemStatus, info.mySprite);
+        GetComponent<Image>().raycastTarget = false;
+        yield return new WaitForEndOfFrame();
+        GetComponent<Image>().raycastTarget = true;
     }
 
     private void Awake()
@@ -32,7 +33,7 @@ public class ImageCrystalSlot : MonoBehaviour, IPointerEnterHandler, IPointerExi
         if (prevCrystalIdx < 12)
         {
             SCrystalInfo info = crystalPrefabs[prevCrystalIdx].GetComponent<ItemCrystal>().crystalInfo;
-            panel.ShowTooltip(info.itemInfo, info.itemStatus, info.mySprite, this.transform.position);
+            panel.ShowTooltip(info.itemInfo, info.itemStatus, info.mySprite, transform.position);
         }
     }
 
