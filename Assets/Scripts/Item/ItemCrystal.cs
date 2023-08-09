@@ -32,6 +32,7 @@ public class ItemCrystal : ItemBase
             GameObject tempGo = crystalManager.EquipCrystal(this);
             if (tempGo == null)
             {
+                crystalManager.HideTooltip();
                 Destroy(gameObject);
                 return;
             }
@@ -39,12 +40,17 @@ public class ItemCrystal : ItemBase
             GameObject crystalGo = Instantiate(tempGo, crystalManager.transform);
 
             if (crystalGo == null)
+            {
+                crystalManager.HideTooltip();
                 Destroy(gameObject);
+            }
 
             Vector3 spawnPos = transform.position;
             spawnPos.y = 0.4f;
 
             crystalGo.transform.position = spawnPos;
+
+            crystalManager.HideTooltip();
 
             Destroy(gameObject);
         }
@@ -55,13 +61,37 @@ public class ItemCrystal : ItemBase
         if (_entity.CompareTag("Player"))
         {
             _entity.GetComponent<StatusGold>().IncreaseGold(60);
+            crystalManager.HideTooltip();
             Destroy(gameObject);
         }
     }
 
-    //private PlayerStatusUIManager statusUIManager;
+    private void OnTriggerEnter(Collider _other)
+    {
+        if (_other.CompareTag("Player"))
+        {
+            Vector2 tooltipPos = Camera.main.WorldToScreenPoint(transform.position);
+            crystalManager.ShowTooltip(crystalInfo.itemInfo, crystalInfo.itemStatus, crystalInfo.mySprite, tooltipPos);
+        }
+    }
+
+    private void OnTriggerStay(Collider _other)
+    {
+        if (_other.CompareTag("Player"))
+        {
+            Vector2 tooltipPos = Camera.main.WorldToScreenPoint(transform.position);
+            crystalManager.UpdateTooltipPos(tooltipPos);
+        }
+    }
+
+    private void OnTriggerExit(Collider _other)
+    {
+        if(_other.CompareTag("Player"))
+        {
+            crystalManager.HideTooltip();
+        }
+    }
 
     private CrystalManager crystalManager;
-
     public SCrystalInfo crystalInfo;
 }

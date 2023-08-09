@@ -22,4 +22,8 @@ public struct SCrystalInfo
     public float increaseAttributeDmg;
     public float increaseAttributeDefense;
     public int myRank;
+    [TextArea]
+    public string itemInfo;
+    [TextArea]
+    public string itemStatus; 
 }

@@ -67,7 +67,7 @@ public class ProjectileController : MonoBehaviour
 
     private void SpawnImpact(Collision _collision, Vector3 _dir)
     {
-        Debug.Log(_collision.contacts[0].point);
+        //Debug.Log(_collision.contacts[0].point);
 
         if (gameObject != null)
             impactPool.SpawnInit(_collision.GetContact(0).point, _dir);

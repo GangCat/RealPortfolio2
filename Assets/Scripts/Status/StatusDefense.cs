@@ -12,7 +12,6 @@ public class StatusDefense : MonoBehaviour
     public float CurDefense => defense;
     public float[] AttributeDefenses => attributeDefenses;
 
-
     public float DefenseDmg(float _dmg)
     {
         return _dmg -= defense > 0 ? defense : 0;

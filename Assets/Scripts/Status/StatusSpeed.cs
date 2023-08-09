@@ -39,8 +39,8 @@ public class StatusSpeed : MonoBehaviour
 
     public void ChangeSpeed(float _ratioSpeed)
     {
-        walkSpeed = oriWalkSpeed * ( 1 - _ratioSpeed);
-        runSpeed = oriRunSpeed * (1 - _ratioSpeed);
+        walkSpeed = oriWalkSpeed * ( 1 + _ratioSpeed);
+        runSpeed = oriRunSpeed * (1 + _ratioSpeed);
 
         onSpeedEvent.Invoke(walkSpeed, runSpeed);
     }

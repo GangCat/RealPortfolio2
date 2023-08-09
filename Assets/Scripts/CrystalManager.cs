@@ -14,6 +14,7 @@ public enum ECrystalCategory
 
 public enum ECrystalColor
 {
+    None = -1,
     Red = 0, Purple, Lilac,
     Lightblue, Blue, Darkblue,
     Yellow, Green, Emerald,
@@ -22,26 +23,44 @@ public enum ECrystalColor
 
 public class CrystalManager : MonoBehaviour
 {
+    public void ShowTooltip(string _itemInfo, string _itemStatus, Sprite _itemSprite, Vector2 _pos)
+    {
+        tooltipPrefab.GetComponent<Tooltip>().ShowTooltip(_itemInfo, _itemStatus, _itemSprite, _pos);
+    }
+
+    public void UpdateTooltipPos(Vector2 _pos)
+    {
+        tooltipPrefab.GetComponent<Tooltip>().UpdateTooltipPos(_pos);
+    }
+
+    public void HideTooltip()
+    {
+        tooltipPrefab.GetComponent<Tooltip>().HideTooltip();
+    }
+
     public GameObject EquipCrystal(ItemCrystal _crystal)
     {
         int prevIdx = imageCrystalSlots[(int)_crystal.crystalInfo.myCategory].PrevCrystalIdx;
 
         if (prevIdx == (int)_crystal.crystalInfo.myColor) // ³¢°íÀÖ´Â ³à¼®À» ´Ù½Ã ³¢·Á°í ÇÏ¸é µî¾÷
         {
-            ++crystalPrefabs[prevIdx].GetComponent<ItemCrystal>().MyRank;
-            if (crystalPrefabs[prevIdx].GetComponent<ItemCrystal>().MyRank > 3)
-                crystalPrefabs[prevIdx].GetComponent<ItemCrystal>().MyRank = 3;
+            ++crystalRankArr[(int)_crystal.crystalInfo.myColor];
+            if (crystalRankArr[(int)_crystal.crystalInfo.myColor] > 3)
+            {
+                crystalRankArr[(int)_crystal.crystalInfo.myColor] = 3;
+                return crystalPrefabs[prevIdx];
+            }
 
-            SetStatus(_crystal.crystalInfo, crystalPrefabs[prevIdx].GetComponent<ItemCrystal>().MyRank);
-            imageCrystalSlots[(int)_crystal.crystalInfo.myCategory].GetComponentInChildren<ImageCrystalRank>().SetRank(crystalPrefabs[prevIdx].GetComponent<ItemCrystal>().MyRank);
+            SetStatus(_crystal.crystalInfo, crystalRankArr[(int)_crystal.crystalInfo.myColor]);
+            imageCrystalSlots[(int)_crystal.crystalInfo.myCategory].GetComponentInChildren<ImageCrystalRank>().SetRank(crystalRankArr[(int)_crystal.crystalInfo.myColor]);
             return null;
         }
         else if (prevIdx < 12)
         {
-            if (crystalPrefabs[prevIdx].GetComponent<ItemCrystal>().MyRank > 1) // ³¢°íÀÖ´Â ³à¼®ÀÌ 2µî±ÞÀÎµ¥ »õ·Î¿î ³à¼®À» ³¢·Á°í ÇÏ¸é
+            if (crystalRankArr[prevIdx] > 1) // ³¢°íÀÖ´Â ³à¼®ÀÌ 2µî±ÞÀÎµ¥ »õ·Î¿î ³à¼®À» ³¢·Á°í ÇÏ¸é
             {
-                crystalPrefabs[prevIdx].GetComponent<ItemCrystal>().MyRank = 1; // µî±Þ 1·Î ÃÊ±âÈ­
-                imageCrystalSlots[(int)_crystal.crystalInfo.myCategory].GetComponentInChildren<ImageCrystalRank>().SetRank(crystalPrefabs[prevIdx].GetComponent<ItemCrystal>().MyRank);
+                crystalRankArr[prevIdx] = 1; // µî±Þ 1·Î ÃÊ±âÈ­
+                imageCrystalSlots[(int)_crystal.crystalInfo.myCategory].GetComponentInChildren<ImageCrystalRank>().SetRank(crystalRankArr[(int)_crystal.crystalInfo.myColor]);
             }
         }
 
@@ -85,17 +104,30 @@ public class CrystalManager : MonoBehaviour
         weapon = player.GetComponentInChildren<WeaponAssaultRifle>();
     }
 
+    private void Start()
+    {
+        for (int i = 0; i < crystalRankArr.Length; ++i)
+            crystalRankArr[i] = 1;
+    }
+
     [Header("-Crystal Slots & Rank")]
     [SerializeField]
-    private ImageCrystalSlot[] imageCrystalSlots;
+    private ImageCrystalSlot[] imageCrystalSlots = null;
 
     [Header("-Player")]
     [SerializeField]
-    private GameObject player;
+    private GameObject player = null;
 
     [Header("-Crystal Prefabs")]
     [SerializeField]
-    private GameObject[] crystalPrefabs;
+    private GameObject[] crystalPrefabs = null;
 
-    private WeaponAssaultRifle weapon;
+    [Header("-Tooltip Prefab")]
+    [SerializeField]
+    private GameObject tooltipPrefab;
+
+
+    private int[] crystalRankArr = new int[12];
+
+    private WeaponAssaultRifle weapon = null;
 }

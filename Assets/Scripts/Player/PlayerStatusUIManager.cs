@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UI;
-
+using UnityEngine.EventSystems;
 
 public class PlayerStatusUIManager : MonoBehaviour
 {
@@ -71,6 +71,29 @@ public class PlayerStatusUIManager : MonoBehaviour
         sb.Append(player.GetComponent<StatusSkill>().SkillCooltimes[2].ToString());
         textSkillCooltime.text = sb.ToString();
         sb.Clear();
+    }
+
+    private void Update()
+    {
+        if (Input.GetButtonDown("Inventory"))
+        {
+            if (!isInvenOpen)
+            {
+                StopCoroutine("CloseInventory");
+                StartCoroutine("OpenInventory");
+            }
+            else
+            {
+                StopCoroutine("OpenInventory");
+                StartCoroutine("CloseInventory");
+            }
+        }
+
+        if (isInvenOpen)
+        {
+            //OnMouseOver evt = new OnMouseOver();
+            //Debug.Log(evt.target);
+        }
     }
 
     private void UpdateMaxHp(float _maxHp)
@@ -152,23 +175,6 @@ public class PlayerStatusUIManager : MonoBehaviour
         sb.Clear();
     }
 
-    private void Update()
-    {
-        if (Input.GetButtonDown("Inventory"))
-        {
-            if (!isInvenOpen)
-            {
-                StopCoroutine("CloseInventory");
-                StartCoroutine("OpenInventory");
-            }
-            else
-            {
-                StopCoroutine("OpenInventory");
-                StartCoroutine("CloseInventory");
-            }
-        }
-    }
-
     private IEnumerator OpenInventory()
     {
         isInvenOpen = true;
@@ -245,6 +251,7 @@ public class PlayerStatusUIManager : MonoBehaviour
     private GameObject player;
 
     private WeaponAssaultRifle weapon;
+
     
     private bool isInvenOpen = false;
 }
