@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileController : MonoBehaviour
+public class ProjectileController : MonoBehaviour, IPauseObserver
 {
     public void Setup(MemoryPool _memoryPool, float _dmg, ImpactMemoryPool _impactPool)
     {
@@ -18,7 +18,15 @@ public class ProjectileController : MonoBehaviour
 
     private IEnumerator AutoDisable()
     {
-        yield return new WaitForSeconds(autoDisableTime);
+        float curTime = Time.time;
+
+        while (autoDisableTime > Time.time - curTime)
+        {
+            if (isPaused)
+                autoDisableTime += Time.deltaTime;
+
+            yield return null;
+        }
 
         Disable();
     }
@@ -31,7 +39,8 @@ public class ProjectileController : MonoBehaviour
 
     private void Update()
     {
-        transform.position += transform.forward * moveSpeed * Time.deltaTime;
+        if(!isPaused)
+            transform.position += transform.forward * moveSpeed * Time.deltaTime;
     }
 
     private void OnCollisionEnter(Collision _collision)
@@ -60,6 +69,7 @@ public class ProjectileController : MonoBehaviour
                 SpawnImpact(_collision, -transform.forward);
                 _collision.transform.GetComponent<BossCollider>().TakeDmg(dmg);
             }
+
         }
 
         Disable();
@@ -67,10 +77,23 @@ public class ProjectileController : MonoBehaviour
 
     private void SpawnImpact(Collision _collision, Vector3 _dir)
     {
-        //Debug.Log(_collision.contacts[0].point);
-
         if (gameObject != null)
             impactPool.SpawnInit(_collision.GetContact(0).point, _dir);
+    }
+
+    public void CheckPaused(bool _isPaused)
+    {
+        isPaused = _isPaused;
+    }
+
+    private void Awake()
+    {
+        gameManager = GameManager.Instance;
+    }
+
+    private void Start()
+    {
+        gameManager.RegisterPauseObserver(GetComponent<IPauseObserver>());
     }
 
     [SerializeField]
@@ -78,7 +101,12 @@ public class ProjectileController : MonoBehaviour
     [SerializeField]
     private float autoDisableTime = 0.5f;
 
+    private bool isPaused = false;
+
     private float dmg = 0;
+
     private MemoryPool memoryPool = null;
     private ImpactMemoryPool impactPool = null;
+    private GameManager gameManager = null;
+
 }

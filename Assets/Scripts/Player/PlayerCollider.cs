@@ -51,6 +51,4 @@ public class PlayerCollider : MonoBehaviour
     private Collider myCollider = null;
     private StatusHP statusHp = null;
     private PlayerAnimatorController playerAnim = null;
-
-    private bool isSelected = false;
 }

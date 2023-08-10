@@ -1058,8 +1058,8 @@ Transform:
   m_LocalScale: {x: 0.01, y: 0.01, z: 0.01}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5642731995259398667}
   - {fileID: 8440476747611013349}
+  - {fileID: 5642731995259398667}
   m_Father: {fileID: 2608341909011297628}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2977,8 +2977,8 @@ MonoBehaviour:
   onHPEvent:
     m_PersistentCalls:
       m_Calls: []
-  curHP: 100
-  maxHP: 200
+  curHp: 100
+  maxHp: 200
 --- !u!114 &7673487250753446345
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3021,7 +3021,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3efb89ef3c6f3f844a32bea3062b5f15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  curDefense: 3
+  defense: 0
   maxDefense: 30
   attributeDefenses:
   - 44
@@ -3111,7 +3111,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2608341909011297554}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &7337694427850844750
 PrefabInstance:
@@ -3130,7 +3130,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1222202649083194027, guid: e3dc66f79bc80df498f961a710ecf8c6, type: 3}
       propertyPath: m_RootOrder
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1222202649083194027, guid: e3dc66f79bc80df498f961a710ecf8c6, type: 3}
       propertyPath: m_LocalPosition.x

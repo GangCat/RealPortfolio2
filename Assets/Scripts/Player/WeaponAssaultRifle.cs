@@ -22,8 +22,6 @@ public class WeaponAssaultRifle : MonoBehaviour
     public float AttackRate => weaponSetting.attackRate;
     public float[] AttributeDmgs => weaponSetting.attributeDmgs;
 
-    public Vector3 HitPoint { get => hitPoint; set => hitPoint = value; }
-
     #region BuffDmg
     public void BuffDmg(float _ratio, float _duration)
     {
@@ -201,9 +199,6 @@ public class WeaponAssaultRifle : MonoBehaviour
 
     private void OnAttack()
     {
-        hitPoint.y = 1.0f;
-        trMuzzleOfWeapon.rotation = Quaternion.LookRotation(hitPoint - trMuzzleOfWeapon.position);
-
         projectileMemoryPool.SpawnProjectile(trMuzzleOfWeapon.position, trMuzzleOfWeapon.rotation, weaponSetting.dmg);
     }
 
@@ -266,6 +261,14 @@ public class WeaponAssaultRifle : MonoBehaviour
         curState = EWeaponState.None;
     }
 
+    public void CheckPaused(bool _isPaused)
+    {
+        isPaused = _isPaused;
+
+        if (isPaused)
+            ChangeState(EWeaponState.Idle);
+    }
+
 
 
     [Header("-MuzzleEffect")]
@@ -282,7 +285,7 @@ public class WeaponAssaultRifle : MonoBehaviour
 
     private bool isReload = false;
     private bool isAttack = false;
-
+    private bool isPaused = false;
     private bool isDmgBuff = false;
     private bool isAttackRateBuff = false;
     private bool isAttributeDmgBuff = false;
@@ -293,7 +296,6 @@ public class WeaponAssaultRifle : MonoBehaviour
 
     private PlayerAnimatorController playerAnim = null;
     private ProjectileMemoryPool projectileMemoryPool = null;
-    private Vector3 hitPoint = Vector3.zero;
 
     private EWeaponState curState = EWeaponState.None;
 }

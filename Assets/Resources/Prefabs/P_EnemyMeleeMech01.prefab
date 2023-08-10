@@ -740,8 +740,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 4.5, y: 5, z: 3}
-  m_Center: {x: 0, y: 2.5, z: 0.25}
+  m_Size: {x: 5.5, y: 6, z: 5}
+  m_Center: {x: 0, y: 3, z: 0.25}
 --- !u!54 &1881783611
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -786,8 +786,8 @@ MonoBehaviour:
   onHPEvent:
     m_PersistentCalls:
       m_Calls: []
-  curHP: 300
-  maxHP: 300
+  curHp: 100
+  maxHp: 200
 --- !u!114 &1881783609
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1118,7 +1118,10 @@ MonoBehaviour:
     curAmmo: 999
     maxAmmo: 999
     attackRate: 2
+    minAttackRate: 0
     attackDistance: 2
+    attributeDmgs: []
+    maxAttributeDmg: 0
     isAutomaticAttack: 0
   enemyCollider: {fileID: 1807178779}
   anim: {fileID: 7572143586383451700}

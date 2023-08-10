@@ -63,5 +63,18 @@ public class PlayerAnimatorController : AnimatorControllerBase
         weaponAR = GetComponentInChildren<WeaponAssaultRifle>();
     }
 
+    public void CheckPaused(bool _isPaused)
+    {
+        isPaused = _isPaused;
+
+        if (isPaused)
+            anim.StartPlayback();
+        else
+            anim.StopPlayback(); 
+
+    }
+
     private WeaponAssaultRifle weaponAR = null;
+
+    private bool isPaused = false;
 }

@@ -5,13 +5,13 @@ using UnityEngine;
 public class PlayerMovementController : MonoBehaviour
 {
     public bool CanDash => canDash;
-    public RaycastHit Hit => hit;
 
     public void MoveUpdate(float _x, float _z, bool _isRun)
     {
+
         moveDir = new Vector3(_x, 0f, _z).normalized;
 
-        if(weaponAR.IsAttack || weaponAR.IsReload)
+        if (weaponAR.IsAttack || weaponAR.IsReload)
         {
             playerRigidbody.velocity = moveDir * statusSpeed.WalkSpeed;
             SetMoveDirWhileAttack(moveDir);
@@ -67,16 +67,21 @@ public class PlayerMovementController : MonoBehaviour
         float lastDashTime = Time.time;
         while (true)
         {
-            
-            if ((Time.time - lastDashTime) > dashRate)
+            while (isPaused) // 일시정지 상태일 때 대기
             {
+                playerRigidbody.velocity = Vector3.zero;
+                CalcCanDash(ref lastDashTime);
+                yield return null;
+            }
+
+            if (CalcCanDash(ref lastDashTime))
+            {
+                Debug.Log("dash");
                 canDash = true;
                 yield break;
             }
 
             yield return null;
-
-            //Debug.DrawRay(transform.position, transform.forward * 1f, Color.red, 2f);
 
             if (playerAnim.CurAnimationIs("Dash"))
                 playerRigidbody.velocity = _moveDir * dashSpeed;
@@ -90,10 +95,15 @@ public class PlayerMovementController : MonoBehaviour
                 playerCollider.IgnoreLayer(gameObject.layer, LayerMask.NameToLayer("Boss"), false);
             }
         }
-
-        
     }
 
+    private bool CalcCanDash(ref float _lastDashTime)
+    {
+        if (isPaused)
+            _lastDashTime += Time.deltaTime;
+
+        return dashRate < (Time.time - _lastDashTime);
+    }
 
     public void RotateUpdate(float _x, float _z, bool _mouseDown)
     {
@@ -104,22 +114,20 @@ public class PlayerMovementController : MonoBehaviour
             Picking(out hit);
 
             Vector3 point = hit.point;
-            
-            float z = 1.0f / Mathf.Tan(30f * Mathf.Deg2Rad);
+
+            float z = 1.2f / Mathf.Tan(30f * Mathf.Deg2Rad);
             point.z -= z;
-
-            weaponAR.HitPoint = point;
-            
             point.y = 0.0f;
-
 
             if (Vector3.SqrMagnitude(point - transform.position) > 1.5f) // 너무 가까운 곳을 찍으면 캐릭터가 누워버림
             {
-                transform.rotation = Quaternion.LookRotation(point - transform.position);
+                float theta = MyMathf.CalcAngleToTarget(transform.position, point);
+                //transform.rotation = Quaternion.LookRotation(point - transform.position);
+                transform.rotation = Quaternion.Euler(0f, -theta + 90, 0f);
                 //transform.LookAt(point);
             }
         }
-        else if(moveDir != Vector3.zero)
+        else if (moveDir != Vector3.zero)
             transform.forward = moveDir;
     }
 
@@ -132,18 +140,24 @@ public class PlayerMovementController : MonoBehaviour
         playerRigidbody = GetComponent<Rigidbody>();
     }
 
-
     public bool Picking(out RaycastHit _hit)
     {
         Vector2 mousePos = Input.mousePosition;
         Ray ray = Camera.main.ScreenPointToRay(mousePos);
 
-        if(Physics.Raycast(ray, out _hit, 1000.0f, layerForPicking))
+        if (Physics.Raycast(ray, out _hit, 1000.0f, layerForPicking))
             return true;
         else
             return false;
     }
 
+    public void CheckPaused(bool _isPaused)
+    {
+        isPaused = _isPaused;
+
+        if (isPaused)
+            playerRigidbody.velocity = Vector3.zero;
+    }
 
     [SerializeField]
     private float dashSpeed = 10.0f;
@@ -155,14 +169,13 @@ public class PlayerMovementController : MonoBehaviour
     private float decelerationRate = 2.0f;
 
     private bool canDash = true;
+    private bool isPaused = false;
 
     private Vector3 moveDir = Vector3.zero;
-    private RaycastHit hit;
 
     private StatusSpeed statusSpeed = null;
     private PlayerAnimatorController playerAnim = null;
     private WeaponAssaultRifle weaponAR = null;
     private PlayerCollider playerCollider = null;
     private Rigidbody playerRigidbody = null;
-
 }

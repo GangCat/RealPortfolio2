@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInputManager : MonoBehaviour
+public class PlayerInputManager : MonoBehaviour, IPauseObserver
 {
     public bool IsInteract
     {
@@ -24,15 +24,34 @@ public class PlayerInputManager : MonoBehaviour
         playerMove = GetComponent<PlayerMovementController>();
         playerAnim = GetComponent<PlayerAnimatorController>();
         weaponAR = GetComponentInChildren<WeaponAssaultRifle>();
+        gameManager = GameManager.Instance;
+    }
+
+    private void Start()
+    {
+        gameManager.RegisterPauseObserver(this.GetComponent<IPauseObserver>());
     }
 
     private void Update()
     {
+        UpdatePause();
+
+        if (isPaused)
+            return;
+
         UpdateInput();
         UpdateMove();
         UpdateDash();
         UpdateAttack();
         UpdateReload();
+    }
+    private void UpdatePause()
+    {
+        if (Input.GetButtonDown("Pause"))
+        {
+            gameManager.TogglePause();
+            Debug.Log(isPaused);
+        }
     }
 
     private void UpdateInput()
@@ -42,6 +61,7 @@ public class PlayerInputManager : MonoBehaviour
         isRun = Input.GetButton("Run");
         isInteract = Input.GetButton("Interact");
         isSellCrystal = Input.GetButton("SellItem");
+
         if (!isInteract)
         {
             isSelected = false;
@@ -95,6 +115,15 @@ public class PlayerInputManager : MonoBehaviour
             weaponAR.ChangeState(EWeaponState.Reload);
     }
 
+    public void CheckPaused(bool _isPaused)
+    {
+        isPaused = _isPaused;
+
+        playerMove.CheckPaused(isPaused);
+        playerAnim.CheckPaused(isPaused);
+        weaponAR.CheckPaused(isPaused);
+    }
+
     private float x = 0.0f;
     private float z = 0.0f;
 
@@ -102,8 +131,10 @@ public class PlayerInputManager : MonoBehaviour
     private bool isInteract = false;
     private bool isSellCrystal = false;
     private bool isSelected = false;
+    private bool isPaused = false;
 
     private WeaponAssaultRifle weaponAR = null;
     private PlayerMovementController playerMove = null;
     private PlayerAnimatorController playerAnim = null;
+    private GameManager gameManager;
 }

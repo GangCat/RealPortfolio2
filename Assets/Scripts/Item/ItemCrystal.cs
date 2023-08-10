@@ -17,7 +17,7 @@ public class ItemCrystal : ItemBase
 
     private void OnEnable()
     {
-        Invoke("SetColliderEnable", 0.5f);
+        //Invoke("SetColliderEnable", 0.5f);
     }
 
     private void SetColliderEnable()
