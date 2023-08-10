@@ -11,12 +11,36 @@ public class EnemyCollider : MonoBehaviour
 
     public void Attack(float _attackTime)
     {
-        myCollider.enabled = true;
-        Invoke("AttackFinish", _attackTime);
+        StartCoroutine("AttackFinish", _attackTime);
     }
 
-    private void AttackFinish()
+    public void TogglePause()
     {
+        isPaused = !isPaused;
+    }
+
+    private IEnumerator AttackFinish(float _attackTime)
+    {
+        float curTime = Time.time;
+        while (Time.time - curTime < 0.2f)
+        {
+            if (isPaused)
+                curTime += Time.deltaTime;
+
+            yield return null;
+        }
+
+        myCollider.enabled = true;
+
+        curTime = Time.time;
+        while (Time.time - curTime < _attackTime)
+        {
+            if (isPaused)
+                curTime += Time.deltaTime;
+
+            yield return null;
+        }
+
         myCollider.enabled = false;
     }
 
@@ -40,6 +64,8 @@ public class EnemyCollider : MonoBehaviour
     }
 
     private float dmg = 0;
+
+    private bool isPaused = false;
 
     private Collider myCollider = null;
 }

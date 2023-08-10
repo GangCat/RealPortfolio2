@@ -84,11 +84,13 @@ public class ProjectileController : MonoBehaviour, IPauseObserver
     public void CheckPaused(bool _isPaused)
     {
         isPaused = _isPaused;
+        trail.IsPaused(isPaused);
     }
 
     private void Awake()
     {
         gameManager = GameManager.Instance;
+        trail = GetComponent<ProjectileTrail>();
     }
 
     private void Start()
@@ -108,5 +110,6 @@ public class ProjectileController : MonoBehaviour, IPauseObserver
     private MemoryPool memoryPool = null;
     private ImpactMemoryPool impactPool = null;
     private GameManager gameManager = null;
+    private ProjectileTrail trail = null;
 
 }

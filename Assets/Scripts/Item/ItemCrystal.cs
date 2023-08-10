@@ -10,19 +10,10 @@ public class ItemCrystal : ItemBase
         get => crystalInfo.myRank;
         set => crystalInfo.myRank = value;
     }
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         crystalManager = GetComponentInParent<CrystalManager>();
-    }
-
-    private void OnEnable()
-    {
-        //Invoke("SetColliderEnable", 0.5f);
-    }
-
-    private void SetColliderEnable()
-    {
-        GetComponent<Collider>().enabled = true;
     }
 
     public override void Use(GameObject _entity)

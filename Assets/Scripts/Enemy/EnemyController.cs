@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-public class EnemyController : MonoBehaviour
+public class EnemyController : MonoBehaviour, IPauseObserver
 {
     public void TakeDmg(float _dmg)
     {
@@ -17,14 +18,22 @@ public class EnemyController : MonoBehaviour
             isDead = true;
             gameObject.layer = 13;
             anim.Play("Die", -1, 0);
-            Invoke("SetDeactive", 3f);
+            StartCoroutine("SetDeactive", 3f);
         }
     }
 
-    private void SetDeactive()
+    public void CheckPaused(bool _isPaused)
     {
-        gameObject.SetActive(false);
+        isPaused = _isPaused;
+
+        if (isPaused)
+            anim.StartPlayback();
+        else
+            anim.StopPlayback();
+
+        weapon.TogglePause();
     }
+
 
     private void Awake()
     {
@@ -32,11 +41,18 @@ public class EnemyController : MonoBehaviour
         statusSpeed = GetComponent<StatusSpeed>();
         anim = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
+        gameManager = GameManager.Instance;
+    }
+
+    private void Start()
+    {
+        gameManager.RegisterPauseObserver(GetComponent<IPauseObserver>());
     }
 
     private void Update()
     {
-        CalcDistanceToTarget();
+        if (!isPaused)
+            CalcDistanceToTarget();
     }
 
     private void CalcDistanceToTarget()
@@ -45,43 +61,12 @@ public class EnemyController : MonoBehaviour
 
         if (isDead) return;
 
-        if (Vector3.SqrMagnitude(targetTr.position - transform.position) < Mathf.Pow(weaponBase.AttackDistance, 2f) && !isAttack)
+        if (Vector3.SqrMagnitude(targetTr.position - transform.position) < Mathf.Pow(weapon.AttackDistance, 2f) && !isAttack)
         {
             anim.SetTrigger("onEngage");
             StopCoroutine("FindPath");
             StartCoroutine("Attack");
         }
-    }
-
-    private void OnCollisionEnter(Collision _collision)
-    {
-        if (_collision.gameObject.CompareTag("Floor"))
-        {
-            roomCollider = _collision.gameObject.GetComponent<RoomCollider>();
-            SetEvent();
-        }
-        else if(_collision.gameObject.CompareTag("Player"))
-        {
-            rigid.isKinematic = true;
-        }
-    }
-
-    private void OnCollisionExit(Collision _collision)
-    {
-        if (_collision.gameObject.CompareTag("Player") && rigid.isKinematic)
-            rigid.isKinematic = false;
-    }
-
-    private void SetEvent()
-    {
-        roomCollider.onEngageEvent.AddListener(SetTarget);
-    }
-
-    private void SetTarget(Transform _targetTr)
-    {
-        targetTr = _targetTr;
-        weaponBase.TargetTr = targetTr;
-        StartCoroutine("FindPath");
     }
 
     private IEnumerator FindPath()
@@ -90,37 +75,47 @@ public class EnemyController : MonoBehaviour
 
         while (true)
         {
+            while (isPaused)
+                yield return null;
+
             Vector3 moveDir = (targetTr.position - transform.position).normalized;
             transform.Translate(moveDir * statusSpeed.WalkSpeed * Time.deltaTime, Space.World);
 
-            transform.LookAt(targetTr);
+            Rotate(moveDir);
             yield return null;
         }
+    }
+
+    private void Rotate(Vector3 _rotDir)
+    {
+        float angle = MyMathf.CalcAngleToTarget(_rotDir);
+        MyMathf.RotateYaw(transform, angle);
     }
 
     private IEnumerator Attack()
     {
         isAttack = true;
 
-        yield return new WaitForSeconds(0.7f); // 때리기 전 딜레이
+        yield return StartCoroutine("WaitSeconds", 0.7f);
 
         while (true)
         {
-            if (weaponBase.AttackType == EAttackType.Range)
+            if (weapon.AttackType == EAttackType.Range)
             {
-                transform.LookAt(targetTr);
-                if (weaponBase.CurAmmo <= 0)
+                Rotate(targetTr.position - transform.position);
+
+                if (weapon.CurAmmo <= 0)
                 {
-                    yield return new WaitForSeconds(3.0f);
-                    weaponBase.Reload();
+                    weapon.Reload();
+                    yield return StartCoroutine("WaitSeconds", 3f);
                 }
             }
 
-            
-            weaponBase.OnAttack();
-            yield return new WaitForSeconds(weaponBase.AttackRate);
+            weapon.OnAttack();
 
-            if (Vector3.SqrMagnitude(targetTr.position - transform.position) > Mathf.Pow(weaponBase.LimitDistance, 2f))
+            yield return StartCoroutine("WaitSeconds", weapon.AttackRate);
+
+            if (Vector3.SqrMagnitude(targetTr.position - transform.position) > Mathf.Pow(weapon.LimitDistance, 2f))
             {
                 StartCoroutine("FindPath");
                 isAttack = false;
@@ -129,6 +124,29 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    private IEnumerator WaitSeconds(float _delayTime)
+    {
+        float curTime = Time.time;
+        while (Time.time - curTime < _delayTime)
+        {
+            if (isPaused)
+                curTime += Time.deltaTime;
+
+            yield return null;
+        }
+    }
+
+    private IEnumerator SetDeactive(float _delayTime)
+    {
+        yield return StartCoroutine("WaitSeconds", _delayTime);
+
+        gameObject.SetActive(false);
+    }
+
+    /// <summary>
+    /// 죽는 애니메이션이 이상해서 y축 포지션을 보완해주려고 만든 코루틴
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator LerpAxisY()
     {
         yield return new WaitForSeconds(1.0f);
@@ -139,18 +157,51 @@ public class EnemyController : MonoBehaviour
 
         while (true)
         {
-            transform.position = 
+            transform.position =
                 Vector3.Lerp(transform.position, targetPos, (Time.time - startTime) / lerpTime);
 
             yield return null;
         }
     }
 
+    private void OnCollisionEnter(Collision _collision)
+    {
+        if (_collision.gameObject.CompareTag("Floor"))
+        {
+            roomCollider = _collision.gameObject.GetComponent<RoomCollider>();
+            SetEvent();
+        }
+        else if (_collision.gameObject.CompareTag("Player"))
+        {
+            rigid.isKinematic = true;
+        }
+    }
+
+    private void SetEvent()
+    {
+        roomCollider.onEngageEvent.AddListener(
+            (_targetTr) =>
+            {
+                targetTr = _targetTr;
+                weapon.TargetTr = targetTr;
+                StartCoroutine("FindPath");
+            }
+            );
+    }
+
+    private void OnCollisionExit(Collision _collision)
+    {
+        if (_collision.gameObject.CompareTag("Player") && rigid.isKinematic)
+            rigid.isKinematic = false;
+    }
+
+
     [SerializeField]
-    private EnemyWeaponBase weaponBase = null;
+    private WeaponBase weapon = null;
 
     private bool isAttack = false;
     private bool isDead = false;
+    private bool isPaused = false;
 
     private Transform targetTr = null;
     private Rigidbody rigid = null;
@@ -158,4 +209,5 @@ public class EnemyController : MonoBehaviour
     private StatusSpeed statusSpeed = null;
     private RoomCollider roomCollider = null;
     private Animator anim = null;
+    private GameManager gameManager = null;
 }

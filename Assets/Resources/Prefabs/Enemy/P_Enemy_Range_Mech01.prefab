@@ -747,7 +747,7 @@ GameObject:
   - component: {fileID: 52047717}
   - component: {fileID: 52047728}
   m_Layer: 7
-  m_Name: P_EnemyRangeMech01
+  m_Name: P_Enemy_Range_Mech01
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -833,7 +833,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ef8e49b3e7d0146b9fcc7a0b9f85b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponBase: {fileID: 55946824935653519}
+  weapon: {fileID: 55946824935653519}
 --- !u!114 &52047717
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -849,8 +849,8 @@ MonoBehaviour:
   onHPEvent:
     m_PersistentCalls:
       m_Calls: []
-  curHP: 200
-  maxHP: 200
+  curHp: 100
+  maxHp: 200
 --- !u!114 &52047728
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1096,7 +1096,15 @@ PrefabInstance:
       propertyPath: anim
       value: 
       objectReference: {fileID: 6545543962332860736}
+    - target: {fileID: 1918887334, guid: 0fdcd4ac2b86a08459d20f49cf40486b, type: 3}
+      propertyPath: enemyController
+      value: 
+      objectReference: {fileID: 9060260291905450148}
     - target: {fileID: 1918887335, guid: 0fdcd4ac2b86a08459d20f49cf40486b, type: 3}
+      propertyPath: increaseCnt
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 2650200150422043992, guid: 0fdcd4ac2b86a08459d20f49cf40486b, type: 3}
       propertyPath: increaseCnt
       value: 3
       objectReference: {fileID: 0}

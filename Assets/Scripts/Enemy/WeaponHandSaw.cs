@@ -2,11 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponHandSaw : EnemyWeaponBase
+public class WeaponHandSaw : WeaponBase
 {
     public override void OnAttack()
     {
-        anim.Play("Punch", -1, 0);
+        enemyController.GetComponent<Animator>().Play("Punch", -1, 0);
         enemyCollider.Attack(1f);
     }
 
@@ -20,8 +20,29 @@ public class WeaponHandSaw : EnemyWeaponBase
         limitDistance = weaponSetting.attackDistance * 1.5f;
     }
 
+    public override void TogglePause()
+    {
+        isPaused = !isPaused;
+
+        if (isPaused)
+        {
+            foreach(Animator anim in gadgetsAnim)
+                anim.StartPlayback();
+        }
+        else
+        {
+            foreach (Animator anim in gadgetsAnim)
+                anim.StopPlayback();
+        }
+    }
+
     [SerializeField]
     private EnemyCollider enemyCollider = null;
     [SerializeField]
-    private Animator anim = null;
+    private EnemyController enemyController = null;
+    [SerializeField]
+    private Animator[] gadgetsAnim = null;
+
+    private bool isPaused = false;
+
 }

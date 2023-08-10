@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1807178777}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3.3, z: 2.2}
+  m_LocalPosition: {x: 0, y: 3.3, z: 2.68}
   m_LocalScale: {x: 3, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -684,7 +684,7 @@ GameObject:
   - component: {fileID: 1881783610}
   - component: {fileID: 1881783609}
   m_Layer: 7
-  m_Name: P_EnemyMeleeMech01
+  m_Name: P_Enemy_Melee_Mech01
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -770,7 +770,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9ef8e49b3e7d0146b9fcc7a0b9f85b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponBase: {fileID: 267455618}
+  weapon: {fileID: 267455618}
 --- !u!114 &1881783610
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1124,7 +1124,15 @@ MonoBehaviour:
     maxAttributeDmg: 0
     isAutomaticAttack: 0
   enemyCollider: {fileID: 1807178779}
-  anim: {fileID: 7572143586383451700}
+  enemyController: {fileID: 1881783612}
+  gadgetsAnim:
+  - {fileID: 7572143586499923761}
+  - {fileID: 7572143586590338805}
+--- !u!95 &7572143586499923761 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 9500000, guid: d4136361ac134684a9f03252d02a5fdf, type: 3}
+  m_PrefabInstance: {fileID: 7572143586490481233}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7572143586503214976
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1263,6 +1271,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 79150fedb950c394f9f3f3bb76d2d14b, type: 3}
+--- !u!95 &7572143586590338805 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 9500000, guid: 79150fedb950c394f9f3f3bb76d2d14b, type: 3}
+  m_PrefabInstance: {fileID: 7572143586580945813}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7572143586645664780
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -2,16 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class ItemBase : MonoBehaviour
+public abstract class ItemBase : MonoBehaviour, IPauseObserver
 {
     public abstract void Use(GameObject _entity);
 
     protected IEnumerator Start()
     {
+        gameManager.RegisterPauseObserver(GetComponent<IPauseObserver>());
+
         float y = transform.position.y;
 
         while (true)
         {
+            while (isPaused)
+                yield return null;
+
             transform.Rotate(Vector3.up * rotSpeed * Time.deltaTime);
 
             Vector3 pos = transform.position;
@@ -22,10 +27,24 @@ public abstract class ItemBase : MonoBehaviour
         }
     }
 
+    protected virtual void Awake()
+    {
+        gameManager = GameManager.Instance;
+    }
+
+    public void CheckPaused(bool _isPaused)
+    {
+        isPaused = _isPaused;
+    }
+
     [SerializeField]
     protected float moveDistance = 0.2f;
     [SerializeField]
     protected float pingpongSpeed = 0.5f;
     [SerializeField]
     protected float rotSpeed = 50f;
+
+    protected bool isPaused = false;
+
+    protected GameManager gameManager = null;
 }

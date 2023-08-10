@@ -15,8 +15,9 @@ GameObject:
   - component: {fileID: 2104523971}
   - component: {fileID: 2104523970}
   - component: {fileID: -3075704494318585221}
+  - component: {fileID: -9144385937949707094}
   m_Layer: 12
-  m_Name: P_ProjectileEnemy2
+  m_Name: P_Enemy_Projectile
   m_TagString: Projectile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -238,3 +239,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 116
   m_CollisionDetection: 0
+--- !u!114 &-9144385937949707094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6145330851264463357}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 246557168881b3e408f26d6c6c80bba9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trailTime: 0.3

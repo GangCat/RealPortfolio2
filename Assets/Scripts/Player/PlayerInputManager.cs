@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerInputManager : MonoBehaviour, IPauseObserver
+public class PlayerInputManager : MonoBehaviour, IPauseObserver, IBossEngageObserver
 {
     public bool IsInteract
     {
@@ -47,6 +47,8 @@ public class PlayerInputManager : MonoBehaviour, IPauseObserver
     }
     private void UpdatePause()
     {
+        if (isBossEngage)
+            return;
         if (Input.GetButtonDown("Pause"))
         {
             gameManager.TogglePause();
@@ -124,6 +126,11 @@ public class PlayerInputManager : MonoBehaviour, IPauseObserver
         weaponAR.CheckPaused(isPaused);
     }
 
+    public void CheckBossEngage(bool _isPaused)
+    {
+        isBossEngage = _isPaused;
+    }
+
     private float x = 0.0f;
     private float z = 0.0f;
 
@@ -132,6 +139,7 @@ public class PlayerInputManager : MonoBehaviour, IPauseObserver
     private bool isSellCrystal = false;
     private bool isSelected = false;
     private bool isPaused = false;
+    private bool isBossEngage = false;
 
     private WeaponAssaultRifle weaponAR = null;
     private PlayerMovementController playerMove = null;

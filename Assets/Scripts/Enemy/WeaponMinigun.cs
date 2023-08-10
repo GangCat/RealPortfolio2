@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public class WeaponMinigun : EnemyWeaponBase
+public class WeaponMinigun : WeaponBase
 {
     public override void OnAttack()
     {
@@ -11,7 +11,7 @@ public class WeaponMinigun : EnemyWeaponBase
         targetPos.y = 1.0f;
         Quaternion rot = Quaternion.LookRotation(targetPos - trMuzzleOfWeapon.position);
         projectileMemoryPool.SpawnProjectile(trMuzzleOfWeapon.position, rot, weaponSetting.dmg);
-        anim.Play("Shoot", -1, 0);
+        enemyController.GetComponent<Animator>().Play("Shoot", -1, 0);
 
         --weaponSetting.curAmmo;
     }
@@ -19,6 +19,15 @@ public class WeaponMinigun : EnemyWeaponBase
     public override void Reload()
     {
         weaponSetting.curAmmo = weaponSetting.maxAmmo;
+    }
+
+    public override void TogglePause()
+    {
+        isPaused = !isPaused;
+        if (isPaused)
+            anim.StartPlayback();
+        else
+            anim.StopPlayback();
     }
 
 
@@ -30,13 +39,17 @@ public class WeaponMinigun : EnemyWeaponBase
     private void Awake()
     {
         projectileMemoryPool = GetComponent<ProjectileMemoryPool>();
+        anim = GetComponent<Animator>();
     }
 
 
     [SerializeField]
     private Transform trMuzzleOfWeapon = null;
     [SerializeField]
-    private Animator anim = null;
+    private EnemyController enemyController = null;
+
+    private bool isPaused = false;
 
     private ProjectileMemoryPool projectileMemoryPool = null;
+    private Animator anim = null;
 }
