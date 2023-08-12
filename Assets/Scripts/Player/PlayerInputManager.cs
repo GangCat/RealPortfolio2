@@ -34,6 +34,11 @@ public class PlayerInputManager : MonoBehaviour, IPauseObserver, IBossEngageObse
         weaponAR.OnUseAmmoCallback = _callback;
     }
 
+    public void SetOnEnemyDamagedCallback(OnEnemyDamagedDelegate _callback)
+    {
+        weaponAR.OnEnemyDamagedCallback = _callback;
+    }
+
     public void SetOnGoldChangeCallback(OnGoldChangeDelegate _callback)
     {
         statusGold.OnGoldChangeCallback = _callback;

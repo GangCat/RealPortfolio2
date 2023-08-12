@@ -9,8 +9,8 @@ using UnityEngine.UI;
 public class PanelPauseMenu : MonoBehaviour
 {
     public delegate void OnClickResumeDelegate();
-    public delegate void OnClickRestartDelegate();
-    public delegate void OnClickMainDelegate();
+    public delegate void OnClickRestartDelegate(string _sceneName);
+    public delegate void OnClickMainDelegate(string _sceneName);
 
     public OnClickResumeDelegate OnClickResumeCallback
     {
@@ -62,6 +62,8 @@ public class PanelPauseMenu : MonoBehaviour
         playerTotalDamage += _dmg;
         textTotalDamage.text = string.Format("적에게 가한 총 데미지: {0:N0}", playerTotalDamage);
     }
+
+    
 
     public void ShowPauseMenu()
     {
@@ -144,7 +146,7 @@ public class PanelPauseMenu : MonoBehaviour
         btnRestart.onClick.AddListener(
             () =>
             {
-                onClickRestartCallback?.Invoke();
+                onClickRestartCallback?.Invoke("Stage");
             }
             );
 
@@ -152,7 +154,7 @@ public class PanelPauseMenu : MonoBehaviour
         btnMain.onClick.AddListener(
             () =>
             {
-                onClickMainCallback?.Invoke();
+                onClickMainCallback?.Invoke("MainMenu");
             }
             );
     }

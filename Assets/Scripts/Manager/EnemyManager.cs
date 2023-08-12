@@ -22,11 +22,15 @@ public class EnemyManager : MonoBehaviour, IStageObserver, IPauseObserver
 
     private IEnumerator SpawnEnemy()
     {
-        enemySpawnCnt += curStage * 2;
+        enemySpawnCnt += curStage * 3;
 
         for (int i = 0; i < enemySpawnCnt; ++i)
         {
-            GameObject enemyGo = enemyMemoryPool.SpawnInit((EnemyMemoryPool.EEnemyType)Random.Range(0, (int)EnemyMemoryPool.EEnemyType.None), GetRandomSpawnPosition(), transform);
+            GameObject enemyGo = enemyMemoryPool.SpawnInit(
+                (EEnemyType)(Random.Range(0, (int)EEnemyType.None)),
+                GetRandomSpawnPosition(),
+                transform
+                );
             enemyGo.GetComponent<EnemyController>().Setup(playerTr, onEnemyDeadCallback);
 
             //GameObject enemyGo = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)], GetRandomSpawnPosition(), Quaternion.identity, transform);
@@ -65,6 +69,7 @@ public class EnemyManager : MonoBehaviour, IStageObserver, IPauseObserver
     {
         gameManager.RegisterStageobserver(GetComponent<IStageObserver>());
         gameManager.RegisterPauseObserver(GetComponent<IPauseObserver>());
+        enemyMemoryPool.SetupEnemyMemoryPool(transform);
     }
 
 

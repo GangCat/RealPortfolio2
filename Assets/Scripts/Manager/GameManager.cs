@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, IStageSubject
 {
@@ -91,32 +92,50 @@ public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, ISt
 
     private void Awake()
     {
+        pauseMenu = FindAnyObjectByType<PanelPauseMenu>();
+        playerManager = FindAnyObjectByType<PlayerInputManager>();
+        enemyManager = FindAnyObjectByType<EnemyManager>();
         instance = this;
-        pauseMenu.OnClickResumeCallback = TogglePause;
-        //pauseMenu.OnClickRestartCallback = null;
-        //pauseMenu.OnClickMainCallback = null;
-        GameStart();
     }
 
     private void Start()
     {
-        playerManager.SetOnUseAmmoCallback(UpdateUsedAmmo);
-        playerManager.SetOnGoldChangeCallback(UpdateGold);
-        playerManager.SetOnPlayerDamagedCallback(UpdateDamagedCount);
-        enemyManager.SetOnEnemyDeadCallback(CalcDeadEnemy);
+        if(mainMenuManager != null)
+            mainMenuManager.OnButtonMainCallback = ChangeScene;
+
+        if(playerManager != null)
+        {
+            playerManager.SetOnUseAmmoCallback(UpdateUsedAmmo);
+            playerManager.SetOnGoldChangeCallback(UpdateGold);
+            playerManager.SetOnPlayerDamagedCallback(UpdateDamagedCount);
+            playerManager.SetOnEnemyDamagedCallback(UpdateEnemyDamaged);
+        }
+
+        if(enemyManager != null)
+            enemyManager.SetOnEnemyDeadCallback(CalcDeadEnemy);
+
+        if(pauseMenu != null)
+        {
+            pauseMenu.OnClickResumeCallback = TogglePause;
+            pauseMenu.OnClickRestartCallback = ChangeScene;
+            pauseMenu.OnClickMainCallback = ChangeScene;
+            pauseMenu.UpdateTime();
+        }
+
     }
 
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.LeftControl))
         {
+            GameStart();
             StageStart();
         }
     }
 
     public void GameStart()
     {
-        pauseMenu.UpdateTime();
+        
     }
 
     private void UpdateUsedAmmo()
@@ -139,6 +158,17 @@ public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, ISt
         pauseMenu.UpdateDamagedCount();
     }
 
+    private void UpdateEnemyDamaged(int _dmg)
+    {
+        pauseMenu.UpdateTotalAttackDamage(_dmg);
+    }
+
+    private void ChangeScene(string _sceneName)
+    {
+        SceneManager.LoadScene(_sceneName);
+    }
+
+
     private GameManager() { }
 
     [SerializeField]
@@ -147,6 +177,8 @@ public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, ISt
     private PlayerInputManager playerManager = null;
     [SerializeField]
     private EnemyManager enemyManager = null;
+    [SerializeField]
+    private MainMenuUIManager mainMenuManager = null;
     
 
     private bool isPaused = false;

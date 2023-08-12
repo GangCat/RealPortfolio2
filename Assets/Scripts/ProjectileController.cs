@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ProjectileController : MonoBehaviour, IPauseObserver
 {
-    public void Setup(MemoryPool _memoryPool, float _dmg, ImpactMemoryPool _impactPool, OnEnemyDamagedDelegate _callback)
+    public void Setup(MemoryPool _memoryPool, float _dmg, ImpactMemoryPool _impactPool, OnEnemyDamagedDelegate _callback = null)
     {
         impactPool = _impactPool;
         memoryPool = _memoryPool;

@@ -11,7 +11,7 @@ public class MemoryPool
     /// 입력받은 오브젝트를 대상으로 메모리풀 생성
     /// </summary>
     /// <param name="_poolObject"></param>
-    public MemoryPool(GameObject _poolObject, int _increaseCnt = 5)
+    public MemoryPool(GameObject _poolObject, int _increaseCnt = 5, Transform _parentTr = null)
     {
         ttlCnt = 0;
         activeCnt = 0;
@@ -21,18 +21,20 @@ public class MemoryPool
         poolEnableList = new List<GameObject>();
         poolDisableQueue = new Queue<GameObject>();
 
-        InstantiateObjects(_increaseCnt);
+        InstantiateObjects(_increaseCnt, _parentTr);
     }
 
     /// <summary>
     /// increaseCnt 단위로 오브젝트를 생성
     /// </summary>
-    public void InstantiateObjects(int _increaseCnt = 5)
+    public void InstantiateObjects(int _increaseCnt = 5, Transform _parentTr = null)
     {
         for (int i = 0; i < _increaseCnt; ++i)
         {
             GameObject poolGo = GameObject.Instantiate(poolObject);
             poolGo.SetActive(false);
+            if (_parentTr != null)
+                poolGo.transform.parent = _parentTr;
 
             poolDisableQueue.Enqueue(poolGo);
         }
@@ -64,13 +66,13 @@ public class MemoryPool
     /// 해당 오브젝트를 생성
     /// </summary>
     /// <returns></returns>
-    public GameObject ActivatePoolItem()
+    public GameObject ActivatePoolItem(int _increaseCnt = 5, Transform _parentTr = null)
     {
         if (poolEnableList == null || poolDisableQueue == null) return null;
 
         // 모든 오브젝트가 활성화되어있는 상태라면 increaseCnt만큼 추가 생성
         if (poolDisableQueue.Count <= 0)
-            InstantiateObjects();
+            InstantiateObjects(_increaseCnt, _parentTr);
 
         GameObject poolGo = poolDisableQueue.Dequeue();
         poolEnableList.Add(poolGo);

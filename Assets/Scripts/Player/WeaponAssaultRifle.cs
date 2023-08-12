@@ -13,7 +13,12 @@ public class WeaponAssaultRifle : MonoBehaviour
 {
     public OnUseAmmoDelegate OnUseAmmoCallback
     {
-        set { onUseAmmoCallback = value; }
+        set => onUseAmmoCallback = value;
+    }
+
+    public OnEnemyDamagedDelegate OnEnemyDamagedCallback
+    {
+        set => onEnemyDamagedCallback = value;
     }
 
     [HideInInspector]
@@ -206,7 +211,7 @@ public class WeaponAssaultRifle : MonoBehaviour
 
     private void OnAttack()
     {
-        projectileMemoryPool.SpawnProjectile(trMuzzleOfWeapon.position, trMuzzleOfWeapon.rotation, weaponSetting.dmg);
+        projectileMemoryPool.SpawnProjectile(trMuzzleOfWeapon.position, trMuzzleOfWeapon.rotation, weaponSetting.dmg, onEnemyDamagedCallback);
     }
 
     private IEnumerator Reload()
@@ -306,4 +311,5 @@ public class WeaponAssaultRifle : MonoBehaviour
 
     private EWeaponState curState = EWeaponState.None;
     private OnUseAmmoDelegate onUseAmmoCallback = null;
+    private OnEnemyDamagedDelegate onEnemyDamagedCallback = null;
 }

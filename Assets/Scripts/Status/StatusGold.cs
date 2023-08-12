@@ -6,7 +6,16 @@ public class StatusGold : MonoBehaviour
 {
     public OnGoldChangeDelegate OnGoldChangeCallback
     {
-        set => onGoldChangeCallback = value;
+        set 
+        { 
+            onGoldChangeCallback = value;
+            SetInitGold();
+        }
+    }
+
+    private void SetInitGold()
+    {
+        onGoldChangeCallback?.Invoke(curGold);
     }
 
     public void IncreaseGold(int _gold)
@@ -41,16 +50,6 @@ public class StatusGold : MonoBehaviour
     private void OnEnable()
     {
         curGold = 1000;
-    }
-
-    private void Start()
-    {
-        Invoke("SetupGold", 0.5f);
-    }
-
-    private void SetupGold()
-    {
-        onGoldChangeCallback?.Invoke(curGold);
     }
 
     [SerializeField]
