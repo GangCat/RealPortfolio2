@@ -12,11 +12,13 @@ TagManager:
   - Item
   - FxTemporaire
   - Boss
+  - Destructible
+  - Slot
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Destructible
   - Water
   - UI
   - Base
@@ -29,8 +31,8 @@ TagManager:
   - EnemyDead
   - Item
   - Boss
-  - 
-  - 
+  - BossProjectile
+  - OverUI
   - 
   - 
   - 
@@ -48,4 +50,7 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Status
+    uniqueID: 1667676413
     locked: 0

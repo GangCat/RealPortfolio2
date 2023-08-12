@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ProjectileController : MonoBehaviour
+public class ProjectileController : MonoBehaviour, IPauseObserver
 {
     public void Setup(MemoryPool _memoryPool, float _dmg, ImpactMemoryPool _impactPool)
     {
@@ -18,19 +18,29 @@ public class ProjectileController : MonoBehaviour
 
     private IEnumerator AutoDisable()
     {
-        yield return new WaitForSeconds(autoDisableTime);
+        float curTime = Time.time;
 
+        while (autoDisableTime > Time.time - curTime)
+        {
+            if (isPaused)
+                autoDisableTime += Time.deltaTime;
+
+            yield return null;
+        }
+        trail.TrailClear();
         Disable();
     }
 
     private void Disable()
     {
-        memoryPool.DeactivatePoolItem(gameObject);
+        if(memoryPool != null)
+            memoryPool.DeactivatePoolItem(gameObject);
     }
 
     private void Update()
     {
-        transform.position += transform.forward * moveSpeed * Time.deltaTime;
+        if(!isPaused)
+            transform.position += transform.forward * moveSpeed * Time.deltaTime;
     }
 
     private void OnCollisionEnter(Collision _collision)
@@ -42,10 +52,10 @@ public class ProjectileController : MonoBehaviour
                 SpawnImpact(_collision, -transform.forward);
                 _collision.transform.GetComponent<EnemyController>().TakeDmg(dmg);
             }
-            else if (_collision.transform.CompareTag("Interactive"))
+            else if (_collision.transform.CompareTag("Destructible"))
             {
                 SpawnImpact(_collision, -transform.forward);
-                _collision.transform.GetComponent<InteractiveObject>().TakeDmg(dmg);
+                _collision.transform.GetComponent<DestructibleObject>().TakeDmg(dmg);
             }
             else if (_collision.transform.CompareTag("Player"))
             {
@@ -59,6 +69,7 @@ public class ProjectileController : MonoBehaviour
                 SpawnImpact(_collision, -transform.forward);
                 _collision.transform.GetComponent<BossCollider>().TakeDmg(dmg);
             }
+
         }
 
         Disable();
@@ -66,19 +77,39 @@ public class ProjectileController : MonoBehaviour
 
     private void SpawnImpact(Collision _collision, Vector3 _dir)
     {
-        Debug.Log(_collision.contacts[0].point);
-
         if (gameObject != null)
             impactPool.SpawnInit(_collision.GetContact(0).point, _dir);
     }
 
+    public void CheckPaused(bool _isPaused)
+    {
+        isPaused = _isPaused;
+        trail.IsPaused(isPaused);
+    }
+
+    private void Awake()
+    {
+        gameManager = GameManager.Instance;
+        trail = GetComponent<ProjectileTrail>();
+    }
+
+    private void Start()
+    {
+        gameManager.RegisterPauseObserver(GetComponent<IPauseObserver>());
+    }
 
     [SerializeField]
     private float moveSpeed = 5.0f;
     [SerializeField]
     private float autoDisableTime = 0.5f;
 
+    private bool isPaused = false;
+
     private float dmg = 0;
+
     private MemoryPool memoryPool = null;
     private ImpactMemoryPool impactPool = null;
+    private GameManager gameManager = null;
+    private ProjectileTrail trail = null;
+
 }
