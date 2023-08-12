@@ -4,9 +4,6 @@ using UnityEngine;
 
 public class Impact : MonoBehaviour
 {
-    private ParticleSystem particle;
-    private MemoryPool memoryPool;
-
     private void Awake()
     {
         particle = GetComponent<ParticleSystem>();
@@ -24,4 +21,7 @@ public class Impact : MonoBehaviour
             memoryPool.DeactivatePoolItem(gameObject);
         }
     }
+
+    private ParticleSystem particle;
+    private MemoryPool memoryPool;
 }

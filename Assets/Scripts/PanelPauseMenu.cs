@@ -57,6 +57,12 @@ public class PanelPauseMenu : MonoBehaviour
         textPlayerDamaged.text = string.Format("피격 횟수 : {0}회", playerDamagedCnt);
     }
 
+    public void UpdateTotalAttackDamage(int _dmg)
+    {
+        playerTotalDamage += _dmg;
+        textTotalDamage.text = string.Format("적에게 가한 총 데미지: {0:N0}", playerTotalDamage);
+    }
+
     public void ShowPauseMenu()
     {
         StopCoroutine("PauseMenuAnimation");
@@ -68,8 +74,6 @@ public class PanelPauseMenu : MonoBehaviour
         StopCoroutine("PauseMenuAnimation");
         StartCoroutine("PauseMenuAnimation", false);
     }
-
-
 
     private IEnumerator Timer()
     {
@@ -159,10 +163,12 @@ public class PanelPauseMenu : MonoBehaviour
     }
 
     private int score = 2000;
-    private int usedAmmoCnt = 0;
     private int deadEnemyCnt = 0;
+    private int playerTotalDamage = 0;
+    private int usedAmmoCnt = 0;
     private int totalGold = 0;
     private int playerDamagedCnt = 0;
+    private int usedSkillCnt = 0;
 
     private float startTime = 0f;
     private float sec = 0f;
@@ -180,11 +186,15 @@ public class PanelPauseMenu : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI textTime = null;
     [SerializeField]
-    private TextMeshProUGUI textUsedAmmo = null;
-    [SerializeField]
     private TextMeshProUGUI textDeadEnemy = null;
+    [SerializeField]
+    private TextMeshProUGUI textTotalDamage = null;
+    [SerializeField]
+    private TextMeshProUGUI textUsedAmmo = null;
     [SerializeField]
     private TextMeshProUGUI textTotalGold = null;
     [SerializeField]
     private TextMeshProUGUI textPlayerDamaged = null;
+    [SerializeField]
+    private TextMeshProUGUI textUsedSkill = null;
 }

@@ -26,10 +26,12 @@ public class EnemyManager : MonoBehaviour, IStageObserver, IPauseObserver
 
         for (int i = 0; i < enemySpawnCnt; ++i)
         {
-            GameObject enemyGo = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)], GetRandomSpawnPosition(), Quaternion.identity, transform);
+            GameObject enemyGo = enemyMemoryPool.SpawnInit((EnemyMemoryPool.EEnemyType)Random.Range(0, (int)EnemyMemoryPool.EEnemyType.None), GetRandomSpawnPosition(), transform);
             enemyGo.GetComponent<EnemyController>().Setup(playerTr, onEnemyDeadCallback);
 
-            yield return StartCoroutine("WaitSeconds", 1f);
+            //GameObject enemyGo = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)], GetRandomSpawnPosition(), Quaternion.identity, transform);
+
+            yield return StartCoroutine("WaitSeconds", spawnDelay);
         }
     }
 
@@ -56,6 +58,7 @@ public class EnemyManager : MonoBehaviour, IStageObserver, IPauseObserver
     private void Awake()
     {
         gameManager = GameManager.Instance;
+        enemyMemoryPool = GetComponent<EnemyMemoryPool>();
     }
 
     private void Start()
@@ -74,6 +77,8 @@ public class EnemyManager : MonoBehaviour, IStageObserver, IPauseObserver
     private GameObject maxSpawnPosition = null;
     [SerializeField]
     private Transform playerTr;
+    [SerializeField]
+    private float spawnDelay = 1f;
 
     private int curStage = 0;
     private int enemySpawnCnt = 5;
@@ -81,6 +86,6 @@ public class EnemyManager : MonoBehaviour, IStageObserver, IPauseObserver
     private bool isPaused = false;
 
     private GameManager gameManager = null;
-
+    private EnemyMemoryPool enemyMemoryPool = null;
     private OnEnemyDeadDelegate onEnemyDeadCallback = null;
 }

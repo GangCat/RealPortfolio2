@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class ProjectileController : MonoBehaviour, IPauseObserver
 {
-    public void Setup(MemoryPool _memoryPool, float _dmg, ImpactMemoryPool _impactPool)
+    public void Setup(MemoryPool _memoryPool, float _dmg, ImpactMemoryPool _impactPool, OnEnemyDamagedDelegate _callback)
     {
         impactPool = _impactPool;
         memoryPool = _memoryPool;
         dmg = _dmg;
+        onEnemyDamagedCallback = _callback;
     }
 
     private void OnEnable()
@@ -51,6 +52,7 @@ public class ProjectileController : MonoBehaviour, IPauseObserver
             {
                 SpawnImpact(_collision, -transform.forward);
                 _collision.transform.GetComponent<EnemyController>().TakeDmg(dmg);
+                onEnemyDamagedCallback?.Invoke((int)dmg);
             }
             else if (_collision.transform.CompareTag("Destructible"))
             {
@@ -111,5 +113,5 @@ public class ProjectileController : MonoBehaviour, IPauseObserver
     private ImpactMemoryPool impactPool = null;
     private GameManager gameManager = null;
     private ProjectileTrail trail = null;
-
+    private OnEnemyDamagedDelegate onEnemyDamagedCallback = null;
 }
