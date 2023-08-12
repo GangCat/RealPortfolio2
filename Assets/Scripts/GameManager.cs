@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject
+public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, IStageSubject
 {
     public static GameManager Instance
     {
@@ -21,92 +21,144 @@ public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject
             return instance;
         }
     }
-
+    #region PauseObserver
     public void RegisterPauseObserver(IPauseObserver _observer)
     {
-        listPauseObservers.Add(_observer);
+        pauseObserverList.Add(_observer);
     }
 
     public void RemovePauseObserver(IPauseObserver _observer)
     {
-        listPauseObservers.Remove(_observer);
+        pauseObserverList.Remove(_observer);
     }
 
     public void TogglePause()
     {
         isPaused = !isPaused;
-        foreach (IPauseObserver observer in listPauseObservers)
+        foreach (IPauseObserver observer in pauseObserverList)
             observer.CheckPaused(isPaused);
 
         if (isPaused)
-            ShowPauseMenuTime();
+        {
+            pauseMenu.ShowPauseMenu();
+        }
+
         else
         {
             StopCoroutine("ShowElapsedTime");
             pauseMenu.ClosePauseMenu();
         }
     }
+    #endregion
 
-
-    public void ToggleBossEngage()
-    {
-        isBossEngage = !isBossEngage;
-        foreach (IBossEngageObserver observer in listBossEngageObservers)
-            observer.CheckBossEngage(isBossEngage);
-    }
-
+    #region BossEngageRegion
     public void RegisterBossEngageObserver(IBossEngageObserver _observer)
     {
-        listBossEngageObservers.Add(_observer);
+        bossEngageObserverList.Add(_observer);
     }
 
     public void RemoveBossEngageObserver(IBossEngageObserver _observer)
     {
-        listBossEngageObservers.Remove(_observer);
+        bossEngageObserverList.Remove(_observer);
     }
+
+    public void ToggleBossEngage()
+    {
+        isBossEngage = !isBossEngage;
+        foreach (IBossEngageObserver observer in bossEngageObserverList)
+            observer.CheckBossEngage(isBossEngage);
+    }
+    #endregion
+
+    #region StageObserver
+    public void RegisterStageobserver(IStageObserver _observer)
+    {
+        stageObserverList.Add(_observer);
+    }
+
+    public void RemoveStageObserver(IStageObserver _observer)
+    {
+        stageObserverList.Remove(_observer);
+    }
+
+    public void StageStart()
+    {
+        ++curStage;
+        foreach (IStageObserver observer in stageObserverList)
+            observer.CheckStage(curStage);
+    }
+    #endregion
 
     private void Awake()
     {
         instance = this;
+        pauseMenu.OnClickResumeCallback = TogglePause;
+        //pauseMenu.OnClickRestartCallback = null;
+        //pauseMenu.OnClickMainCallback = null;
+        GameStart();
+    }
+
+    private void Start()
+    {
+        playerManager.SetOnUseAmmoCallback(UpdateUsedAmmo);
+        playerManager.SetOnGoldChangeCallback(UpdateGold);
+        playerManager.SetOnPlayerDamagedCallback(UpdateDamagedCount);
+        enemyManager.SetOnEnemyDeadCallback(CalcDeadEnemy);
+    }
+
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.LeftControl))
+        {
+            StageStart();
+        }
     }
 
     public void GameStart()
     {
-        startTime = Time.time;
+        pauseMenu.UpdateTime();
     }
 
-    private void ShowPauseMenuTime()
+    private void UpdateUsedAmmo()
     {
-        startTime = Time.time;
-        pauseMenu.ShowPauseMenu();
-        StartCoroutine("ShowElapsedTime");
+        pauseMenu.UpdateUsedAmmo();
     }
 
-    private IEnumerator ShowElapsedTime()
+    private void CalcDeadEnemy()
     {
-        while (true)
-        {
-            textTime.text = "Time: " + (Time.time - startTime).ToString("F2");
-            yield return null;
-        }
+        pauseMenu.UpdateDeadEnemy();
     }
 
+    private void UpdateGold(int _increasedGold)
+    {
+        pauseMenu.UpdateGold(_increasedGold);
+    }
+
+    private void UpdateDamagedCount()
+    {
+        pauseMenu.UpdateDamagedCount();
+    }
 
     private GameManager() { }
 
     [SerializeField]
-    private TextMeshProUGUI textTime = null;
-    [SerializeField]
     private PanelPauseMenu pauseMenu = null;
+    [SerializeField]
+    private PlayerInputManager playerManager = null;
+    [SerializeField]
+    private EnemyManager enemyManager = null;
+    
 
     private bool isPaused = false;
     private bool isBossEngage = false;
 
-    private float startTime = 0f;
+    private int curStage = 0;
 
-    private List<IPauseObserver> listPauseObservers = new List<IPauseObserver>();
-    private List<IBossEngageObserver> listBossEngageObservers = new List<IBossEngageObserver>();
     private static GameManager instance = null;
+
+    private List<IPauseObserver> pauseObserverList = new List<IPauseObserver>();
+    private List<IBossEngageObserver> bossEngageObserverList = new List<IBossEngageObserver>();
+    private List<IStageObserver> stageObserverList = new List<IStageObserver>();
 
 
 }

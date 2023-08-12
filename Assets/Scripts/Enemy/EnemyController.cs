@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class EnemyController : MonoBehaviour, IPauseObserver
 {
+    public OnEnemyDeadDelegate OnEnemyDeadCallback
+    {
+        set => onEnemyDeadCallback = value;
+    }
+
     public void TakeDmg(float _dmg)
     {
         if (statusHp.DecreaseHp(_dmg))
@@ -18,6 +22,7 @@ public class EnemyController : MonoBehaviour, IPauseObserver
             isDead = true;
             gameObject.layer = 13;
             anim.Play("Die", -1, 0);
+            onEnemyDeadCallback?.Invoke();
             StartCoroutine("SetDeactive", 3f);
         }
     }
@@ -34,6 +39,13 @@ public class EnemyController : MonoBehaviour, IPauseObserver
         weapon.TogglePause();
     }
 
+    public void Setup(Transform _targetTr, OnEnemyDeadDelegate _onEnemyDeadCallback)
+    {
+        targetTr = _targetTr;
+        weapon.TargetTr = _targetTr;
+        onEnemyDeadCallback = _onEnemyDeadCallback;
+    }
+
 
     private void Awake()
     {
@@ -47,6 +59,7 @@ public class EnemyController : MonoBehaviour, IPauseObserver
     private void Start()
     {
         gameManager.RegisterPauseObserver(GetComponent<IPauseObserver>());
+        StartCoroutine("FindPath");
     }
 
     private void Update()
@@ -111,6 +124,8 @@ public class EnemyController : MonoBehaviour, IPauseObserver
                 }
             }
 
+            yield return null;
+
             weapon.OnAttack();
 
             yield return StartCoroutine("WaitSeconds", weapon.AttackRate);
@@ -169,7 +184,7 @@ public class EnemyController : MonoBehaviour, IPauseObserver
         if (_collision.gameObject.CompareTag("Floor"))
         {
             roomCollider = _collision.gameObject.GetComponent<RoomCollider>();
-            SetEvent();
+            //SetEvent();
         }
         else if (_collision.gameObject.CompareTag("Player"))
         {
@@ -177,17 +192,17 @@ public class EnemyController : MonoBehaviour, IPauseObserver
         }
     }
 
-    private void SetEvent()
-    {
-        roomCollider.onEngageEvent.AddListener(
-            (_targetTr) =>
-            {
-                targetTr = _targetTr;
-                weapon.TargetTr = targetTr;
-                StartCoroutine("FindPath");
-            }
-            );
-    }
+    //private void SetEvent()
+    //{
+    //    roomCollider.onEngageEvent.AddListener(
+    //        (_targetTr) =>
+    //        {
+    //            targetTr = _targetTr;
+    //            weapon.TargetTr = targetTr;
+                
+    //        }
+    //        );
+    //}
 
     private void OnCollisionExit(Collision _collision)
     {
@@ -210,4 +225,5 @@ public class EnemyController : MonoBehaviour, IPauseObserver
     private RoomCollider roomCollider = null;
     private Animator anim = null;
     private GameManager gameManager = null;
+    private OnEnemyDeadDelegate onEnemyDeadCallback = null;
 }

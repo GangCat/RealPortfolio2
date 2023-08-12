@@ -1,9 +1,62 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PanelPauseMenu : MonoBehaviour
 {
+    public delegate void OnClickResumeDelegate();
+    public delegate void OnClickRestartDelegate();
+    public delegate void OnClickMainDelegate();
+
+    public OnClickResumeDelegate OnClickResumeCallback
+    {
+        set { onClickResumeCallback = value; }
+    }
+
+    public OnClickRestartDelegate OnClickRestartCallback
+    {
+        set { onClickRestartCallback = value; }
+    }
+
+    public OnClickMainDelegate OnClickMainCallback
+    {
+        set { onClickMainCallback = value; }
+    }
+
+    public void UpdateTime()
+    {
+        startTime = Time.time;
+        StartCoroutine("Timer");
+    }
+
+    public void UpdateUsedAmmo()
+    {
+        ++usedAmmoCnt;
+        textUsedAmmo.text = string.Format("»ç¿ëÇÑ ÃÑ¾Ë ¼ö : {0:D3}", usedAmmoCnt);
+    }
+
+    public void UpdateDeadEnemy()
+    {
+        ++deadEnemyCnt;
+        textDeadEnemy.text = string.Format("Á×ÀÎ ¸ó½ºÅÍ ¼ö : {0:D2}", deadEnemyCnt);
+    }
+
+    public void UpdateGold(int _totalGold)
+    {
+        totalGold += _totalGold;
+        textTotalGold.text = string.Format("ÃÑ È¹µæ °ñµå : {0:N0}", totalGold);
+    }
+
+    public void UpdateDamagedCount()
+    {
+        ++playerDamagedCnt;
+        textPlayerDamaged.text = string.Format("ÇÇ°Ý È½¼ö : {0}È¸", playerDamagedCnt);
+    }
+
     public void ShowPauseMenu()
     {
         StopCoroutine("PauseMenuAnimation");
@@ -14,6 +67,35 @@ public class PanelPauseMenu : MonoBehaviour
     {
         StopCoroutine("PauseMenuAnimation");
         StartCoroutine("PauseMenuAnimation", false);
+    }
+
+
+
+    private IEnumerator Timer()
+    {
+        while (true)
+        {
+            sec += Time.deltaTime;
+            if (sec >= 60)
+            {
+                ++min;
+                sec -= 60;
+            }
+
+            textTime.text = string.Format("Time: {0:D2}:{1:D2}", min, (int)sec);
+
+            yield return null;
+        }
+    }
+
+    private void CalcScore()
+    {
+        score = Mathf.Clamp(
+            4000 + deadEnemyCnt * 50 - (int)((Time.time - startTime) * 0.5f) - playerDamagedCnt * 3, 
+            0, 
+            999999);
+
+        textScore.text = string.Format("Score: {0:N0}", score);
     }
 
     private IEnumerator PauseMenuAnimation(bool _isOpen)
@@ -33,6 +115,42 @@ public class PanelPauseMenu : MonoBehaviour
     private void Awake()
     {
         rectTr = GetComponent<RectTransform>();
+        SetButtonDelegate();
+    }
+
+    
+
+    private void Update()
+    {
+        CalcScore();
+    }
+
+
+    private void SetButtonDelegate()
+    {
+        Button btnResume = GetComponentInChildren<ButtonResume>().transform.GetComponent<Button>();
+        btnResume.onClick.AddListener(
+            () =>
+            {
+                onClickResumeCallback?.Invoke();
+            }
+            );
+
+        Button btnRestart = GetComponentInChildren<ButtonRestart>().transform.GetComponent<Button>();
+        btnRestart.onClick.AddListener(
+            () =>
+            {
+                onClickRestartCallback?.Invoke();
+            }
+            );
+
+        Button btnMain = GetComponentInChildren<ButtonMain>().transform.GetComponent<Button>();
+        btnMain.onClick.AddListener(
+            () =>
+            {
+                onClickMainCallback?.Invoke();
+            }
+            );
     }
 
     private void Start()
@@ -40,5 +158,33 @@ public class PanelPauseMenu : MonoBehaviour
         rectTr.localScale = new Vector2(1f, 0f);
     }
 
+    private int score = 2000;
+    private int usedAmmoCnt = 0;
+    private int deadEnemyCnt = 0;
+    private int totalGold = 0;
+    private int playerDamagedCnt = 0;
+
+    private float startTime = 0f;
+    private float sec = 0f;
+    private int min = 0;
+
     private RectTransform rectTr = null;
+
+    private OnClickResumeDelegate onClickResumeCallback = null;
+    private OnClickRestartDelegate onClickRestartCallback = null;
+    private OnClickMainDelegate onClickMainCallback = null;
+
+
+    [SerializeField]
+    private TextMeshProUGUI textScore = null;
+    [SerializeField]
+    private TextMeshProUGUI textTime = null;
+    [SerializeField]
+    private TextMeshProUGUI textUsedAmmo = null;
+    [SerializeField]
+    private TextMeshProUGUI textDeadEnemy = null;
+    [SerializeField]
+    private TextMeshProUGUI textTotalGold = null;
+    [SerializeField]
+    private TextMeshProUGUI textPlayerDamaged = null;
 }

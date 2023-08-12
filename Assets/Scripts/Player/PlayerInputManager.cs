@@ -23,13 +23,30 @@ public class PlayerInputManager : MonoBehaviour, IPauseObserver, IBossEngageObse
     {
         playerMove = GetComponent<PlayerMovementController>();
         playerAnim = GetComponent<PlayerAnimatorController>();
+        playercollider = GetComponent<PlayerCollider>();
         weaponAR = GetComponentInChildren<WeaponAssaultRifle>();
+        statusGold = GetComponent<StatusGold>();
         gameManager = GameManager.Instance;
+    }
+
+    public void SetOnUseAmmoCallback(OnUseAmmoDelegate _callback)
+    {
+        weaponAR.OnUseAmmoCallback = _callback;
+    }
+
+    public void SetOnGoldChangeCallback(OnGoldChangeDelegate _callback)
+    {
+        statusGold.OnGoldChangeCallback = _callback;
+    }
+
+    public void SetOnPlayerDamagedCallback(OnPlayerDamagedDelegate _callback)
+    {
+        playercollider.OnPlayerDamagedCallback = _callback;
     }
 
     private void Start()
     {
-        gameManager.RegisterPauseObserver(this.GetComponent<IPauseObserver>());
+        gameManager.RegisterPauseObserver(GetComponent<IPauseObserver>());
     }
 
     private void Update()
@@ -144,5 +161,7 @@ public class PlayerInputManager : MonoBehaviour, IPauseObserver, IBossEngageObse
     private WeaponAssaultRifle weaponAR = null;
     private PlayerMovementController playerMove = null;
     private PlayerAnimatorController playerAnim = null;
-    private GameManager gameManager;
+    private PlayerCollider playercollider = null;
+    private GameManager gameManager = null;
+    private StatusGold statusGold = null;
 }

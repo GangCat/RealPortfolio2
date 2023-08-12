@@ -27,7 +27,7 @@ public class ProjectileController : MonoBehaviour, IPauseObserver
 
             yield return null;
         }
-
+        trail.TrailClear();
         Disable();
     }
 

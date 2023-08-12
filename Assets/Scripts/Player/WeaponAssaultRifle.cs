@@ -11,6 +11,11 @@ public class AttributeDmgEvent : UnityEngine.Events.UnityEvent<float[]> { }
 public enum EWeaponState { None = -1, Idle, Attack, Reload }
 public class WeaponAssaultRifle : MonoBehaviour
 {
+    public OnUseAmmoDelegate OnUseAmmoCallback
+    {
+        set { onUseAmmoCallback = value; }
+    }
+
     [HideInInspector]
     public AmmoEvent onAmmoEvent = new AmmoEvent();
     public DmgEvent onDmgEvent = new DmgEvent();
@@ -170,6 +175,8 @@ public class WeaponAssaultRifle : MonoBehaviour
 
             --weaponSetting.curAmmo;
 
+            onUseAmmoCallback?.Invoke();
+
             onAmmoEvent.Invoke(weaponSetting.curAmmo);
 
             playerAnim.PlayAttack();
@@ -298,4 +305,5 @@ public class WeaponAssaultRifle : MonoBehaviour
     private ProjectileMemoryPool projectileMemoryPool = null;
 
     private EWeaponState curState = EWeaponState.None;
+    private OnUseAmmoDelegate onUseAmmoCallback = null;
 }

@@ -42,7 +42,6 @@ public class WeaponMinigun : WeaponBase
         anim = GetComponent<Animator>();
     }
 
-
     [SerializeField]
     private Transform trMuzzleOfWeapon = null;
     [SerializeField]

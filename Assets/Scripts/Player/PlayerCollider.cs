@@ -5,6 +5,11 @@ using UnityEngine;
 
 public class PlayerCollider : MonoBehaviour
 {
+    public OnPlayerDamagedDelegate OnPlayerDamagedCallback
+    {
+        set => onPlayerDamagedCallback = value;
+    }
+
     public void SetCollider(bool _boolean)
     {
         myCollider.enabled = _boolean;
@@ -14,7 +19,10 @@ public class PlayerCollider : MonoBehaviour
     {
         if (!playerAnim.CurAnimationIs("Dash"))
         {
-            if (statusHp.DecreaseHp(_dmg))
+            bool isDead = statusHp.DecreaseHp(_dmg);
+            onPlayerDamagedCallback?.Invoke();
+
+            if (isDead)
                 Debug.Log("GameOver");
         }
     }
@@ -51,4 +59,5 @@ public class PlayerCollider : MonoBehaviour
     private Collider myCollider = null;
     private StatusHP statusHp = null;
     private PlayerAnimatorController playerAnim = null;
+    private OnPlayerDamagedDelegate onPlayerDamagedCallback = null;
 }

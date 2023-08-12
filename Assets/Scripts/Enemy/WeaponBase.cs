@@ -9,8 +9,8 @@ public abstract class WeaponBase : MonoBehaviour
     public int CurAmmo => weaponSetting.curAmmo;
     public float LimitDistance => limitDistance;
 
-    public Transform TargetTr { 
-        get => targetTr; 
+    public Transform TargetTr 
+    { 
         set => targetTr = value; 
     }
 

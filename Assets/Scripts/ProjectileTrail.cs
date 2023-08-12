@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class ProjectileTrail : MonoBehaviour
 {
-
     public void IsPaused(bool _isPaused)
     {
         if (gameObject.activeSelf)
@@ -17,6 +16,11 @@ public class ProjectileTrail : MonoBehaviour
                 trailRenderer.time = trailTime;
             }
         }
+    }
+
+    public void TrailClear()
+    {
+        trailRenderer.Clear();
     }
 
     private IEnumerator Delay()
@@ -33,9 +37,9 @@ public class ProjectileTrail : MonoBehaviour
         trailRenderer = GetComponent<TrailRenderer>();
     }
 
+
     [SerializeField]
     private float trailTime = 0.05f;
 
     private TrailRenderer trailRenderer = null;
-    
 }

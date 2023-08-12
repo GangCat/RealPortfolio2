@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class StatusGold : MonoBehaviour
 {
-    public int MaxGold => maxGold;
-    public int CurGold
+    public OnGoldChangeDelegate OnGoldChangeCallback
     {
-        get => curGold;
-        set => curGold = value;
+        set => onGoldChangeCallback = value;
     }
 
     public void IncreaseGold(int _gold)
     {
-        curGold = curGold + _gold >= maxGold ? maxGold : curGold + _gold;
+        curGold += _gold;
+
+        if (curGold > maxGold)
+        {
+            onGoldChangeCallback?.Invoke(_gold - (curGold - maxGold));
+            curGold = maxGold;
+        }
+        else
+            onGoldChangeCallback?.Invoke(_gold);
     }
 
     /// <summary>
@@ -34,7 +40,17 @@ public class StatusGold : MonoBehaviour
 
     private void OnEnable()
     {
-        curGold = 100;
+        curGold = 1000;
+    }
+
+    private void Start()
+    {
+        Invoke("SetupGold", 0.5f);
+    }
+
+    private void SetupGold()
+    {
+        onGoldChangeCallback?.Invoke(curGold);
     }
 
     [SerializeField]
@@ -42,4 +58,5 @@ public class StatusGold : MonoBehaviour
     [SerializeField]
     private int maxGold = 99999;
 
+    private OnGoldChangeDelegate onGoldChangeCallback = null;
 }
