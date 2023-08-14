@@ -121,7 +121,11 @@ MonoBehaviour:
   m_MinSize: {x: 400, y: 200}
   m_MaxSize: {x: 32384, y: 16192}
   vertical: 0
+<<<<<<< Updated upstream
   controlID: 88391
+=======
+  controlID: 280
+>>>>>>> Stashed changes
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -146,7 +150,11 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 200}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
+<<<<<<< Updated upstream
   controlID: 88392
+=======
+  controlID: 281
+>>>>>>> Stashed changes
 --- !u!114 &7
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -875,7 +883,11 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
+<<<<<<< Updated upstream
       m_SelectedIDs: 96b70000
+=======
+      m_SelectedIDs: ca720000
+>>>>>>> Stashed changes
       m_LastClickedID: 0
       m_ExpandedIDs: ee80f8ff54b2f9ff30bef9ff34cff9ff8012faffa81ffaff6403fbff0c23fbff4660fbff989afbff6e9cfbff10a1fbff1aa1fbff90a1fbff48f3fbff9ef3fbfffcfffbffa600fcffee0cfcff3c0dfcff9a0dfcff7819fcff7234fcff88a6feff8411ffff4c59ffffbe5effff3a69ffff4a69ffff5669ffff207dffff2c7dffffbab7ffff1ab8ffff7ab8ffffdab8fffff2bfffff0ee8ffff04f8fffff4fffffffc6c0000306d00003c4f0200444f02006c4f02009087020098870200cc870200a69202000493020088950200
       m_RenameOverlay:
