@@ -10,6 +10,7 @@
 /[Ll]ogs/
 /[Mm]emoryCaptures/
 [Aa]ssets/[Hh]eavyPack/
+[Aa]ssets/[Ss]ciFi_Environment_Pack/
 
 # Never ignore Asset meta data
 !/[Aa]ssets/**/*.meta
