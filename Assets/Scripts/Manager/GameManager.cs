@@ -93,33 +93,40 @@ public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, ISt
     private void Awake()
     {
         pauseMenu = FindAnyObjectByType<PanelPauseMenu>();
-        playerManager = FindAnyObjectByType<PlayerInputManager>();
-        enemyManager = FindAnyObjectByType<EnemyManager>();
+        playerMgr = FindAnyObjectByType<PlayerInputManager>();
+        enemyMgr = FindAnyObjectByType<EnemyManager>();
+        stageMgr = FindAnyObjectByType<StageManager>();
         instance = this;
     }
 
     private void Start()
     {
-        if(mainMenuManager != null)
-            mainMenuManager.OnButtonMainCallback = ChangeScene;
+        if(mainMenuMgr != null)
+            mainMenuMgr.OnButtonMainCallback = ChangeScene;
 
-        if(playerManager != null)
+        if(playerMgr != null)
         {
-            playerManager.SetOnUseAmmoCallback(UpdateUsedAmmo);
-            playerManager.SetOnGoldChangeCallback(UpdateGold);
-            playerManager.SetOnPlayerDamagedCallback(UpdateDamagedCount);
-            playerManager.SetOnEnemyDamagedCallback(UpdateEnemyDamaged);
+            playerMgr.SetOnUseAmmoCallback(UpdateUsedAmmo);
+            playerMgr.SetOnGoldChangeCallback(UpdateGold);
+            playerMgr.SetOnPlayerDamagedCallback(UpdateDamagedCount);
+            playerMgr.SetOnEnemyDamagedCallback(UpdateEnemyDamaged);
         }
 
-        if(enemyManager != null)
-            enemyManager.SetOnEnemyDeadCallback(CalcDeadEnemy);
+        if(enemyMgr != null)
+            enemyMgr.SetOnEnemyDeadCallback(CalcDeadEnemy);
 
         if(pauseMenu != null)
         {
+            pauseMenu.Init();
             pauseMenu.OnClickResumeCallback = TogglePause;
             pauseMenu.OnClickRestartCallback = ChangeScene;
             pauseMenu.OnClickMainCallback = ChangeScene;
             pauseMenu.UpdateTime();
+        }
+
+        if(stageMgr != null)
+        {
+            stageMgr.Init(5, StageStart);
         }
 
     }
@@ -174,11 +181,13 @@ public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, ISt
     [SerializeField]
     private PanelPauseMenu pauseMenu = null;
     [SerializeField]
-    private PlayerInputManager playerManager = null;
+    private PlayerInputManager playerMgr = null;
     [SerializeField]
-    private EnemyManager enemyManager = null;
+    private EnemyManager enemyMgr = null;
     [SerializeField]
-    private MainMenuUIManager mainMenuManager = null;
+    private MainMenuUIManager mainMenuMgr = null;
+    [SerializeField]
+    private StageManager stageMgr = null;
     
 
     private bool isPaused = false;

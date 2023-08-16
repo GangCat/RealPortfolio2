@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 7896017875802965379}
   - component: {fileID: 7896017875801965053}
   - component: {fileID: 7896017875809097729}
+  - component: {fileID: 7171148201436508894}
+  - component: {fileID: 7590510383093185494}
   m_Layer: 0
   m_Name: Barrel
   m_TagString: Untagged
@@ -98,3 +100,38 @@ CapsuleCollider:
   m_Height: 1.2
   m_Direction: 1
   m_Center: {x: 0, y: 0.6, z: 0}
+--- !u!114 &7171148201436508894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7896017875803936135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d4da08a5d08d824c8e37ac16d806e42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onHPEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  curHp: 100
+  maxHp: 200
+--- !u!114 &7590510383093185494
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7896017875803936135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d839f22efdc59346be288e8b06a2269, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemPrefabs:
+  - {fileID: 1190587027235668133, guid: 7dfea13123348784cb460c0cf712d65e, type: 3}
+  - {fileID: 8870151948775833121, guid: c2df595dd6d92974c9ee50ad0cca4fc5, type: 3}
+  - {fileID: 8870151948775833121, guid: 42f7b263cafc6a94e959a4aeb774df45, type: 3}
+  - {fileID: 8870151948775833121, guid: 30eec3422ddbab84381ad071097f336b, type: 3}
+  - {fileID: 8870151948775833121, guid: cfeb9808a16420f40958c7ccb5891e06, type: 3}

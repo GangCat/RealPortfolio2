@@ -222,7 +222,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 50
-  autoDisableTime: 0.5
+  autoDisableTime: 3
 --- !u!54 &-3075704494318585221
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -251,3 +251,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 246557168881b3e408f26d6c6c80bba9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  trailTime: 0.05

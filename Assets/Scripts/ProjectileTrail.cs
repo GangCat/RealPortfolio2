@@ -20,6 +20,9 @@ public class ProjectileTrail : MonoBehaviour
 
     public void TrailClear()
     {
+        if (trailRenderer == null)
+            return;
+
         trailRenderer.Clear();
     }
 

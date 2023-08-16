@@ -22,7 +22,7 @@ public class EnemyManager : MonoBehaviour, IStageObserver, IPauseObserver
 
     private IEnumerator SpawnEnemy()
     {
-        enemySpawnCnt += curStage * 3;
+        enemySpawnCnt += 1;
 
         for (int i = 0; i < enemySpawnCnt; ++i)
         {
@@ -31,9 +31,7 @@ public class EnemyManager : MonoBehaviour, IStageObserver, IPauseObserver
                 GetRandomSpawnPosition(),
                 transform
                 );
-            enemyGo.GetComponent<EnemyController>().Setup(playerTr, onEnemyDeadCallback);
-
-            //GameObject enemyGo = Instantiate(enemyPrefabs[Random.Range(0, enemyPrefabs.Length)], GetRandomSpawnPosition(), Quaternion.identity, transform);
+            enemyGo.GetComponent<EnemyController>().Setup(player, onEnemyDeadCallback);
 
             yield return StartCoroutine("WaitSeconds", spawnDelay);
         }
@@ -75,13 +73,11 @@ public class EnemyManager : MonoBehaviour, IStageObserver, IPauseObserver
 
 
     [SerializeField]
-    private GameObject[] enemyPrefabs = null;
-    [SerializeField]
     private GameObject minSpawnPosition = null;
     [SerializeField]
     private GameObject maxSpawnPosition = null;
     [SerializeField]
-    private Transform playerTr;
+    private GameObject player;
     [SerializeField]
     private float spawnDelay = 1f;
 

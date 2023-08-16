@@ -1226,9 +1226,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 0}
-  playerManager: {fileID: 0}
-  enemyManager: {fileID: 0}
-  mainMenuManager: {fileID: 856467515}
+  playerMgr: {fileID: 0}
+  enemyMgr: {fileID: 0}
+  mainMenuMgr: {fileID: 856467515}
+  stageMgr: {fileID: 0}
 --- !u!4 &2137734461
 Transform:
   m_ObjectHideFlags: 0

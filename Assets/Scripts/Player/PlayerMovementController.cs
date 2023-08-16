@@ -63,6 +63,7 @@ public class PlayerMovementController : MonoBehaviour
         playerCollider.IgnoreLayer(gameObject.layer, LayerMask.NameToLayer("Enemy"), true);
         playerCollider.IgnoreLayer(gameObject.layer, LayerMask.NameToLayer("Interactive"), true);
         playerCollider.IgnoreLayer(gameObject.layer, LayerMask.NameToLayer("Boss"), true);
+        playerCollider.IgnoreLayer(gameObject.layer, LayerMask.NameToLayer("Obstacle"), true);
 
         float lastDashTime = Time.time;
         while (true)
@@ -93,6 +94,7 @@ public class PlayerMovementController : MonoBehaviour
                 playerCollider.IgnoreLayer(gameObject.layer, LayerMask.NameToLayer("Enemy"), false);
                 playerCollider.IgnoreLayer(gameObject.layer, LayerMask.NameToLayer("Interactive"), false);
                 playerCollider.IgnoreLayer(gameObject.layer, LayerMask.NameToLayer("Boss"), false);
+                playerCollider.IgnoreLayer(gameObject.layer, LayerMask.NameToLayer("Obstacle"), false);
             }
         }
     }
@@ -115,7 +117,7 @@ public class PlayerMovementController : MonoBehaviour
 
             Vector3 point = hit.point;
 
-            float z = 1.2f / Mathf.Tan(30f * Mathf.Deg2Rad);
+            float z = 1.2f / Mathf.Tan(50f * Mathf.Deg2Rad);
             point.z -= z;
             point.y = 0.0f;
 

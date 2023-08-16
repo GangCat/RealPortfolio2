@@ -2,22 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MyCameraController : MonoBehaviour
-{   
-    private void Awake()
+public class MyCameraController : MonoBehaviour, IStageObserver
+{
+    public void CheckStage(int _curStage)
     {
-        Cam = GetComponent<Camera>();
+        transform.position += Vector3.forward * 60f;
     }
 
-    private void LateUpdate()
+    private void Start()
     {
-        transform.position = playerTr.position + offset;
+        GameManager.Instance.RegisterStageobserver(GetComponent<IStageObserver>());
     }
-
-    [SerializeField]
-    private Vector3     offset = Vector3.zero;
-    [SerializeField]
-    private Transform   playerTr = null;
-
-    private Camera      Cam = null; // 나중에 카메라 흔들림 넣을 때 쓸거심
 }

@@ -40,12 +40,17 @@ public class PlayerCollider : MonoBehaviour
 
     private void OnTriggerStay(Collider _other)
     {
-        if (_other.CompareTag("Interactive"))
+        if (_other.CompareTag("Crystal"))
         {
             if (GetComponent<PlayerInputManager>().IsInteract)
                 _other.GetComponent<ItemBase>().Use(gameObject);
             else if (GetComponent<PlayerInputManager>().IsSellCrystal)
                 _other.GetComponent<ItemCrystal>().SellCrystal(gameObject);
+        }
+        else if (_other.CompareTag("Interactive"))
+        {
+            if (GetComponent<PlayerInputManager>().IsInteract)
+                _other.GetComponent<InteractiveBase>().Use();
         }
     }
 

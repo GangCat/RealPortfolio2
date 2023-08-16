@@ -14,6 +14,9 @@ public class ProjectileController : MonoBehaviour, IPauseObserver
 
     private void OnEnable()
     {
+        if(trail != null)
+            trail.TrailClear();
+
         StartCoroutine("AutoDisable");
     }
 
@@ -28,7 +31,6 @@ public class ProjectileController : MonoBehaviour, IPauseObserver
 
             yield return null;
         }
-        trail.TrailClear();
         Disable();
     }
 
@@ -54,6 +56,10 @@ public class ProjectileController : MonoBehaviour, IPauseObserver
                 _collision.transform.GetComponent<EnemyController>().TakeDmg(dmg);
                 onEnemyDamagedCallback?.Invoke((int)dmg);
             }
+            else if (_collision.transform.CompareTag("Obstacle"))
+            {
+                SpawnImpact(_collision, -transform.forward);
+            }
             else if (_collision.transform.CompareTag("Destructible"))
             {
                 SpawnImpact(_collision, -transform.forward);
@@ -65,7 +71,9 @@ public class ProjectileController : MonoBehaviour, IPauseObserver
                 _collision.transform.GetComponent<PlayerCollider>().TakeDmg(dmg);
             }
             else if (_collision.transform.CompareTag("Wall"))
+            {
                 SpawnImpact(_collision, -transform.forward);
+            }
             else if (_collision.transform.CompareTag("Boss"))
             {
                 SpawnImpact(_collision, -transform.forward);

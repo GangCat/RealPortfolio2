@@ -9,7 +9,9 @@ public class DestructibleBarrel : DestructibleObject
     {
         if (statusHp.DecreaseHp(_dmg))
         {
-            Instantiate(ItemPrefabs[Random.Range(0,ItemPrefabs.Length)], transform.position, Quaternion.identity);
+            Vector3 spawnPos = transform.position;
+            spawnPos.y += 1f;
+            Instantiate(ItemPrefabs[Random.Range(0,ItemPrefabs.Length)], spawnPos, Quaternion.identity);
             Destroy(gameObject);
         }
     }

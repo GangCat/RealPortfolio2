@@ -2,11 +2,25 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EEnemyType { Melee, Range, None }
 public class EnemyController : MonoBehaviour, IPauseObserver
 {
+    public delegate void OnDeactivateDelegate(EEnemyType _enemyType, GameObject _enemyGo);
+    private OnDeactivateDelegate onDeactivateCallback = null;
+
+    public OnDeactivateDelegate OnDeactivateCallback
+    {
+        set => onDeactivateCallback = value;
+    }
+
     public OnEnemyDeadDelegate OnEnemyDeadCallback
     {
         set => onEnemyDeadCallback = value;
+    }
+
+    public void Init(EEnemyType _enemyType)
+    {
+        enemyType = _enemyType;
     }
 
     public void TakeDmg(float _dmg)
@@ -39,10 +53,10 @@ public class EnemyController : MonoBehaviour, IPauseObserver
         weapon.TogglePause();
     }
 
-    public void Setup(Transform _targetTr, OnEnemyDeadDelegate _onEnemyDeadCallback)
+    public void Setup(GameObject _target, OnEnemyDeadDelegate _onEnemyDeadCallback)
     {
-        targetTr = _targetTr;
-        weapon.TargetTr = _targetTr;
+        targetTr = _target.transform;
+        weapon.TargetTr = _target.transform;
         onEnemyDeadCallback = _onEnemyDeadCallback;
     }
 
@@ -155,7 +169,8 @@ public class EnemyController : MonoBehaviour, IPauseObserver
     {
         yield return StartCoroutine("WaitSeconds", _delayTime);
 
-        gameObject.SetActive(false);
+        onDeactivateCallback?.Invoke(enemyType, gameObject);
+        //gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -168,7 +183,7 @@ public class EnemyController : MonoBehaviour, IPauseObserver
 
         float startTime = Time.time;
         float lerpTime = 0.7f;
-        Vector3 targetPos = new Vector3(transform.position.x, -1.2f, transform.position.z);
+        Vector3 targetPos = new Vector3(transform.position.x, -0.5f, transform.position.z);
 
         while (true)
         {
@@ -181,28 +196,11 @@ public class EnemyController : MonoBehaviour, IPauseObserver
 
     private void OnCollisionEnter(Collision _collision)
     {
-        if (_collision.gameObject.CompareTag("Floor"))
-        {
-            roomCollider = _collision.gameObject.GetComponent<RoomCollider>();
-            //SetEvent();
-        }
-        else if (_collision.gameObject.CompareTag("Player"))
+        if (_collision.gameObject.CompareTag("Player"))
         {
             rigid.isKinematic = true;
         }
     }
-
-    //private void SetEvent()
-    //{
-    //    roomCollider.onEngageEvent.AddListener(
-    //        (_targetTr) =>
-    //        {
-    //            targetTr = _targetTr;
-    //            weapon.TargetTr = targetTr;
-                
-    //        }
-    //        );
-    //}
 
     private void OnCollisionExit(Collision _collision)
     {
@@ -222,8 +220,8 @@ public class EnemyController : MonoBehaviour, IPauseObserver
     private Rigidbody rigid = null;
     private StatusHP statusHp = null;
     private StatusSpeed statusSpeed = null;
-    private RoomCollider roomCollider = null;
     private Animator anim = null;
     private GameManager gameManager = null;
     private OnEnemyDeadDelegate onEnemyDeadCallback = null;
+    private EEnemyType enemyType = EEnemyType.None;
 }

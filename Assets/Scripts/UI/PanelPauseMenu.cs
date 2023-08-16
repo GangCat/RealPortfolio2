@@ -124,8 +124,6 @@ public class PanelPauseMenu : MonoBehaviour
         SetButtonDelegate();
     }
 
-    
-
     private void Update()
     {
         CalcScore();
@@ -159,9 +157,14 @@ public class PanelPauseMenu : MonoBehaviour
             );
     }
 
-    private void Start()
+    public void Init()
     {
         rectTr.localScale = new Vector2(1f, 0f);
+        rectTr.localPosition = Vector3.zero;
+    }
+
+    private void Start()
+    {
     }
 
     private int score = 2000;

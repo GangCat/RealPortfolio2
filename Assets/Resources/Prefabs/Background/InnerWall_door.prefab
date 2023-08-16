@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1185858745805771188}
   - component: {fileID: 1185858745806904636}
   - component: {fileID: 1185858745811093808}
+  - component: {fileID: 8331186426681805312}
   m_Layer: 0
   m_Name: doors
   m_TagString: Untagged
@@ -97,6 +98,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.0304, y: 2.3000002, z: 1.9849001}
   m_Center: {x: 0.0013000001, y: 1.2909, z: -1.1926501}
+--- !u!114 &8331186426681805312
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1185858745808806398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27d0f8c0d94198b46998c904c405bdb2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1185858745808871928
 GameObject:
   m_ObjectHideFlags: 0
@@ -112,7 +125,7 @@ GameObject:
   - component: {fileID: 1185858745811013942}
   m_Layer: 0
   m_Name: InnerWall_door
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -126,7 +139,7 @@ Transform:
   m_GameObject: {fileID: 1185858745808871928}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -9.382018, y: 0.10000038, z: 11.144657}
-  m_LocalScale: {x: 2, y: 2, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 1185858745809155604}
