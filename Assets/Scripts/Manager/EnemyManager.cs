@@ -13,6 +13,7 @@ public class EnemyManager : MonoBehaviour, IStageObserver, IPauseObserver
     {
         curStage = _curStage;
         StartCoroutine("SpawnEnemy");
+        enemyMemoryPool.CheckIsEnemyClear();
     }
 
     public void CheckPaused(bool _isPaused)
@@ -20,11 +21,22 @@ public class EnemyManager : MonoBehaviour, IStageObserver, IPauseObserver
         isPaused = _isPaused;
     }
 
+    public void ResetSpawnPos(GameObject _minSpawnPoint, GameObject _maxSpawnPoint)
+    {
+        minSpawnPosition = _minSpawnPoint;
+        maxSpawnPosition = _maxSpawnPoint;
+    }
+
+    public void InitEnemyClearCallback(OnEnemyClearDelegate _enemyClearCallback)
+    {
+        enemyMemoryPool.OnEnemyClearCallback = _enemyClearCallback;
+    }
+
     private IEnumerator SpawnEnemy()
     {
-        enemySpawnCnt += 1;
+        int ttlEnemyCnt = enemySpawnCnt + (curStage * 2);
 
-        for (int i = 0; i < enemySpawnCnt; ++i)
+        for (int i = 0; i < ttlEnemyCnt; ++i)
         {
             GameObject enemyGo = enemyMemoryPool.SpawnInit(
                 (EEnemyType)(Random.Range(0, (int)EEnemyType.None)),
@@ -54,7 +66,7 @@ public class EnemyManager : MonoBehaviour, IStageObserver, IPauseObserver
         float x = Random.Range(minSpawnPosition.transform.position.x, maxSpawnPosition.transform.position.x);
         float z = Random.Range(minSpawnPosition.transform.position.z, maxSpawnPosition.transform.position.z);
 
-        return new Vector3(x, 0f, z);
+        return new Vector3(x, 0.1f, z);
     }
 
     private void Awake()
@@ -71,22 +83,20 @@ public class EnemyManager : MonoBehaviour, IStageObserver, IPauseObserver
     }
 
 
-
-    [SerializeField]
-    private GameObject minSpawnPosition = null;
-    [SerializeField]
-    private GameObject maxSpawnPosition = null;
     [SerializeField]
     private GameObject player;
     [SerializeField]
     private float spawnDelay = 1f;
 
-    private int curStage = 0;
     private int enemySpawnCnt = 5;
+    private int curStage = 0;
 
     private bool isPaused = false;
 
-    private GameManager gameManager = null;
-    private EnemyMemoryPool enemyMemoryPool = null;
+    private GameObject minSpawnPosition = null;
+    private GameObject maxSpawnPosition = null;
+
+    private GameManager         gameManager = null;
+    private EnemyMemoryPool     enemyMemoryPool = null;
     private OnEnemyDeadDelegate onEnemyDeadCallback = null;
 }

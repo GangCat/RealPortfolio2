@@ -58,6 +58,7 @@ public class EnemyController : MonoBehaviour, IPauseObserver
         targetTr = _target.transform;
         weapon.TargetTr = _target.transform;
         onEnemyDeadCallback = _onEnemyDeadCallback;
+        StartCoroutine("FindPath");
     }
 
 
@@ -73,7 +74,6 @@ public class EnemyController : MonoBehaviour, IPauseObserver
     private void Start()
     {
         gameManager.RegisterPauseObserver(GetComponent<IPauseObserver>());
-        StartCoroutine("FindPath");
     }
 
     private void Update()
@@ -104,6 +104,8 @@ public class EnemyController : MonoBehaviour, IPauseObserver
         {
             while (isPaused)
                 yield return null;
+
+            if (!targetTr) continue;
 
             Vector3 moveDir = (targetTr.position - transform.position).normalized;
             transform.Translate(moveDir * statusSpeed.WalkSpeed * Time.deltaTime, Space.World);
@@ -168,9 +170,8 @@ public class EnemyController : MonoBehaviour, IPauseObserver
     private IEnumerator SetDeactive(float _delayTime)
     {
         yield return StartCoroutine("WaitSeconds", _delayTime);
-
+        gameObject.layer = 7;
         onDeactivateCallback?.Invoke(enemyType, gameObject);
-        //gameObject.SetActive(false);
     }
 
     /// <summary>

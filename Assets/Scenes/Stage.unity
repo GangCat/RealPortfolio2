@@ -1088,8 +1088,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 708a2a2619798654a8541b7cbdbe79e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  minSpawnPosition: {fileID: 1291426904}
-  maxSpawnPosition: {fileID: 714765450}
   player: {fileID: 1766410079}
   spawnDelay: 0
 --- !u!114 &158698286
@@ -4123,11 +4121,6 @@ Transform:
   m_Father: {fileID: 969077619}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &714765450 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 714765450, guid: 1d8a4b8074030bf4aae187fee74bf49c, type: 3}
-  m_PrefabInstance: {fileID: 968245833791830198}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &729716108
 GameObject:
   m_ObjectHideFlags: 0
@@ -7009,11 +7002,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   info: "\uC2A4\uD0AC \uACF5\uACA9\uB825\nq\uC2A4\uD0AC / e\uC2A4\uD0AC / r\uC2A4\uD0AC"
---- !u!1 &1291426904 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1291426904, guid: 1d8a4b8074030bf4aae187fee74bf49c, type: 3}
-  m_PrefabInstance: {fileID: 968245833791830198}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1303080901
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12453,6 +12441,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: P_Stage
       objectReference: {fileID: 0}
+    - target: {fileID: 968245833943041904, guid: 1d8a4b8074030bf4aae187fee74bf49c, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 968245833943041905, guid: 1d8a4b8074030bf4aae187fee74bf49c, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -12495,6 +12487,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 968245833943041905, guid: 1d8a4b8074030bf4aae187fee74bf49c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8697669776891427791, guid: 1d8a4b8074030bf4aae187fee74bf49c, type: 3}
+      propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -12856,7 +12852,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2608341909011297628, guid: 17de3bba4c1998146945ff2146867a55, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -24.86
+      value: -24.6
       objectReference: {fileID: 0}
     - target: {fileID: 2608341909011297628, guid: 17de3bba4c1998146945ff2146867a55, type: 3}
       propertyPath: m_LocalRotation.w
@@ -12893,6 +12889,10 @@ PrefabInstance:
     - target: {fileID: 2608341909011589500, guid: 17de3bba4c1998146945ff2146867a55, type: 3}
       propertyPath: m_Name
       value: P_Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 5642731993802053649, guid: 17de3bba4c1998146945ff2146867a55, type: 3}
+      propertyPath: weaponSetting.dmg
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 5642731995259398667, guid: 17de3bba4c1998146945ff2146867a55, type: 3}
       propertyPath: m_LocalPosition.y

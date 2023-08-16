@@ -85,8 +85,11 @@ public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, ISt
     public void StageStart()
     {
         ++curStage;
+        ResetEnemySpawnPos();
+
         foreach (IStageObserver observer in stageObserverList)
             observer.CheckStage(curStage);
+
     }
     #endregion
 
@@ -112,8 +115,11 @@ public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, ISt
             playerMgr.SetOnEnemyDamagedCallback(UpdateEnemyDamaged);
         }
 
-        if(enemyMgr != null)
+        if (enemyMgr != null)
+        {
             enemyMgr.SetOnEnemyDeadCallback(CalcDeadEnemy);
+            enemyMgr.InitEnemyClearCallback(StageClear);
+        }
 
         if(pauseMenu != null)
         {
@@ -136,13 +142,18 @@ public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, ISt
         if(Input.GetKeyDown(KeyCode.LeftControl))
         {
             GameStart();
-            StageStart();
         }
     }
 
     public void GameStart()
     {
-        
+        ResetEnemySpawnPos();
+        enemyMgr.CheckStage(curStage);
+    }
+
+    private void ResetEnemySpawnPos()
+    {
+        enemyMgr.ResetSpawnPos(stageMgr.GetMinSpawnPoint(curStage), stageMgr.GetMaxSpawnPoint(curStage));
     }
 
     private void UpdateUsedAmmo()
@@ -175,6 +186,10 @@ public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, ISt
         SceneManager.LoadScene(_sceneName);
     }
 
+    private void StageClear()
+    {
+        stageMgr.ActivateDoorTrigger(curStage);
+    }
 
     private GameManager() { }
 

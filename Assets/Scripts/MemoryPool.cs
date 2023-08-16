@@ -130,7 +130,11 @@ public class MemoryPool
         }
 
         activeCnt = 0;
+    }
 
+    public bool IsEnableListEmpty()
+    {
+        return poolEnableList.Count < 1;
     }
 
     private int ttlCnt = 0;
