@@ -2,16 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyManager : MonoBehaviour, IStageObserver, IPauseObserver
+public class EnemyManager : MonoBehaviour, IStageEngageObserver, IPauseObserver
 {
     public void SetOnEnemyDeadCallback(OnEnemyDeadDelegate _onEnemyDeadCallback)
     {
         onEnemyDeadCallback = _onEnemyDeadCallback;
     }
 
-    public void CheckStage(int _curStage)
+    public void CheckStageEngage()
     {
-        curStage = _curStage;
         StartCoroutine("SpawnEnemy");
         enemyMemoryPool.CheckIsEnemyClear();
     }
@@ -34,19 +33,25 @@ public class EnemyManager : MonoBehaviour, IStageObserver, IPauseObserver
 
     private IEnumerator SpawnEnemy()
     {
-        int ttlEnemyCnt = enemySpawnCnt + (curStage * 2);
+        int ttlEnemyCnt = enemyMaxSpawnCnt;
 
         for (int i = 0; i < ttlEnemyCnt; ++i)
         {
             GameObject enemyGo = enemyMemoryPool.SpawnInit(
-                (EEnemyType)(Random.Range(0, (int)EEnemyType.None)),
+                (EEnemyType)Random.Range(0, (int)EEnemyType.None),
                 GetRandomSpawnPosition(),
                 transform
                 );
-            enemyGo.GetComponent<EnemyController>().Setup(player, onEnemyDeadCallback);
+            EnemyController enemyCTRL = enemyGo.GetComponent<EnemyController>();
+            enemyCTRL.Setup(player, onEnemyDeadCallback);
 
-            yield return StartCoroutine("WaitSeconds", spawnDelay);
+            if (isPaused)
+                enemyCTRL.CheckPaused(isPaused);
+
+            yield return null;
         }
+
+        
     }
 
     private IEnumerator WaitSeconds(float _delayTime)
@@ -77,7 +82,7 @@ public class EnemyManager : MonoBehaviour, IStageObserver, IPauseObserver
 
     private void Start()
     {
-        gameManager.RegisterStageobserver(GetComponent<IStageObserver>());
+        gameManager.RegisterStageobserver(GetComponent<IStageEngageObserver>());
         gameManager.RegisterPauseObserver(GetComponent<IPauseObserver>());
         enemyMemoryPool.SetupEnemyMemoryPool(transform);
     }
@@ -85,10 +90,8 @@ public class EnemyManager : MonoBehaviour, IStageObserver, IPauseObserver
 
     [SerializeField]
     private GameObject player;
-    [SerializeField]
-    private float spawnDelay = 1f;
 
-    private int enemySpawnCnt = 5;
+    private int enemyMaxSpawnCnt = 5;
     private int curStage = 0;
 
     private bool isPaused = false;

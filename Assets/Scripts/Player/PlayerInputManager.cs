@@ -19,6 +19,11 @@ public class PlayerInputManager : MonoBehaviour, IPauseObserver, IBossEngageObse
 
     public bool IsSellCrystal => isSellCrystal;
 
+    public void TeleportPlayer(Vector3 _moveVec)
+    {
+        playerMove.TeleportPlayer(_moveVec);
+    }
+
     private void Awake()
     {
         playerMove = GetComponent<PlayerMovementController>();

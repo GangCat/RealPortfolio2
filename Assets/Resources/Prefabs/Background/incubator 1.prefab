@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1943877300106964655}
   - component: {fileID: 1943877300102779801}
   m_Layer: 0
-  m_Name: incubator
+  m_Name: incubator 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

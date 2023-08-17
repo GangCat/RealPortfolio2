@@ -17,8 +17,8 @@ public class EnemyMemoryPool : MonoBehaviour
     public GameObject SpawnInit(EEnemyType _enemyType, Vector3 _pos, Transform _parentTr)
     {
         GameObject enemyGo = memoryPools[(int)_enemyType].ActivatePoolItem(5, _parentTr);
-        enemyGo.transform.position = _pos;
-        enemyGo.GetComponent<EnemyController>().Init(_enemyType);
+        enemyGo.transform.position = _pos; 
+        enemyGo.GetComponent<EnemyController>().Init(_enemyType); 
         enemyGo.GetComponent<EnemyController>().OnDeactivateCallback = DeactivateEnemy;
         return enemyGo;
     }

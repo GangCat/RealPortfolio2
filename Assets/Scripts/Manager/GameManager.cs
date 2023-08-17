@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, IStageSubject
+public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, IStageEngageSubject
 {
     public static GameManager Instance
     {
@@ -72,14 +72,14 @@ public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, ISt
     #endregion
 
     #region StageObserver
-    public void RegisterStageobserver(IStageObserver _observer)
+    public void RegisterStageobserver(IStageEngageObserver _observer)
     {
-        stageObserverList.Add(_observer);
+        stageEngageObserverList.Add(_observer);
     }
 
-    public void RemoveStageObserver(IStageObserver _observer)
+    public void RemoveStageObserver(IStageEngageObserver _observer)
     {
-        stageObserverList.Remove(_observer);
+        stageEngageObserverList.Remove(_observer);
     }
 
     public void StageStart()
@@ -87,9 +87,20 @@ public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, ISt
         ++curStage;
         ResetEnemySpawnPos();
 
-        foreach (IStageObserver observer in stageObserverList)
-            observer.CheckStage(curStage);
+        PauseToggleWithoutPauseMenu();
 
+        foreach (IStageEngageObserver observer in stageEngageObserverList)
+            observer.CheckStageEngage();
+
+        Invoke("PauseToggleWithoutPauseMenu", 0.7f);
+
+    }
+
+    private void PauseToggleWithoutPauseMenu()
+    {
+        isPaused = !isPaused;
+        foreach (IPauseObserver observer in pauseObserverList)
+            observer.CheckPaused(isPaused);
     }
     #endregion
 
@@ -132,9 +143,8 @@ public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, ISt
 
         if(stageMgr != null)
         {
-            stageMgr.Init(5, StageStart);
+            stageMgr.Init(5, StageStart, TeleportPlayer);
         }
-
     }
 
     private void Update()
@@ -148,7 +158,7 @@ public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, ISt
     public void GameStart()
     {
         ResetEnemySpawnPos();
-        enemyMgr.CheckStage(curStage);
+        enemyMgr.CheckStageEngage();
     }
 
     private void ResetEnemySpawnPos()
@@ -188,7 +198,12 @@ public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, ISt
 
     private void StageClear()
     {
-        stageMgr.ActivateDoorTrigger(curStage);
+        stageMgr.OpenDoor(curStage);
+    }
+
+    private void TeleportPlayer(Vector3 _moveVec)
+    {
+        playerMgr.TeleportPlayer(_moveVec);
     }
 
     private GameManager() { }
@@ -214,7 +229,7 @@ public class GameManager : MonoBehaviour, IPauseSubject, IBossEngageSubject, ISt
 
     private List<IPauseObserver> pauseObserverList = new List<IPauseObserver>();
     private List<IBossEngageObserver> bossEngageObserverList = new List<IBossEngageObserver>();
-    private List<IStageObserver> stageObserverList = new List<IStageObserver>();
+    private List<IStageEngageObserver> stageEngageObserverList = new List<IStageEngageObserver>();
 
 
 }

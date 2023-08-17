@@ -68,6 +68,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6436439018115761011}
   - component: {fileID: 7483600201988883775}
+  - component: {fileID: 1906388122289230775}
   m_Layer: 19
   m_Name: EnemyTouchCollider
   m_TagString: Untagged
@@ -84,8 +85,8 @@ Transform:
   m_GameObject: {fileID: 3605111973884672376}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 2.25, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 1.5, y: 4, z: 1.5}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7572143586376268244}
   m_RootOrder: 3
@@ -103,6 +104,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &1906388122289230775
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3605111973884672376}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7b9dcd4efe3ab484eb89114adc5552eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7572143586376033668
 GameObject:
   m_ObjectHideFlags: 0
@@ -743,7 +756,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7572143586376033780}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.5, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -817,6 +830,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weapon: {fileID: 267455618}
+  enemyTouchCollider: {fileID: 1906388122289230775}
 --- !u!114 &1881783610
 MonoBehaviour:
   m_ObjectHideFlags: 0

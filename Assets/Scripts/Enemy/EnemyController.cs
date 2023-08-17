@@ -34,7 +34,8 @@ public class EnemyController : MonoBehaviour, IPauseObserver
             Debug.Log(gameObject.name);
 
             isDead = true;
-            gameObject.layer = 13;
+            gameObject.layer = LayerMask.NameToLayer("EnemyDead");
+            enemyTouchCollider.SetLayer(LayerMask.NameToLayer("EnemyDead"));
             anim.Play("Die", -1, 0);
             onEnemyDeadCallback?.Invoke();
             StartCoroutine("SetDeactive", 3f);
@@ -58,6 +59,8 @@ public class EnemyController : MonoBehaviour, IPauseObserver
         targetTr = _target.transform;
         weapon.TargetTr = _target.transform;
         onEnemyDeadCallback = _onEnemyDeadCallback;
+        isDead = false;
+        isAttack = false;
         StartCoroutine("FindPath");
     }
 
@@ -170,7 +173,8 @@ public class EnemyController : MonoBehaviour, IPauseObserver
     private IEnumerator SetDeactive(float _delayTime)
     {
         yield return StartCoroutine("WaitSeconds", _delayTime);
-        gameObject.layer = 7;
+        gameObject.layer = LayerMask.NameToLayer("Enemy");
+        enemyTouchCollider.SetLayer(LayerMask.NameToLayer("EnemyTouch"));
         onDeactivateCallback?.Invoke(enemyType, gameObject);
     }
 
@@ -212,6 +216,8 @@ public class EnemyController : MonoBehaviour, IPauseObserver
 
     [SerializeField]
     private WeaponBase weapon = null;
+    [SerializeField]
+    private EnemyTouchCollider enemyTouchCollider = null;
 
     private bool isAttack = false;
     private bool isDead = false;

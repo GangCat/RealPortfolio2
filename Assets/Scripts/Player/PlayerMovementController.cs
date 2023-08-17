@@ -34,6 +34,11 @@ public class PlayerMovementController : MonoBehaviour
 
     }
 
+    public void TeleportPlayer(Vector3 _moveVec)
+    {
+        transform.position += _moveVec;
+    }
+
     private void SetMoveDirWhileAttack(Vector3 _moveDir)
     {
         Matrix4x4 matRot = Matrix4x4.Rotate(transform.rotation);

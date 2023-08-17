@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class Stage : MonoBehaviour
 {
-    public void ActivateDoorTrigger()
+    public void OpenDoor()
     {
-        console.ActivateTrigger();
+        foreach(DoorToNextStage door in doors)
+            door.OpenDoor();
     }
 
     public GameObject GetMinSpawnPoint()
@@ -19,19 +20,33 @@ public class Stage : MonoBehaviour
         return maxSpawnPoint.gameObject;
     }
 
-    public void Init(OnPlayerMoveToNextStageDelegate _callback)
+    public void Init(VoidVoidDelegate _moveToNextStageCallback, VoidVectorDelegate _teleportPlayerCallback)
     {
-        trigger = GetComponentInChildren<TriggerToNextStage>();
-        console = GetComponentInChildren<ConsoleToNextStage>();
+        triggers = GetComponentsInChildren<StageMoveTrigger>();
+        doors = GetComponentsInChildren<DoorToNextStage>();
 
-        trigger.OnPlayerMoveToNextStageCallback = _callback;
+        foreach (StageMoveTrigger trigger in triggers)
+        {
+            trigger.Init(_moveToNextStageCallback, _teleportPlayerCallback);
+            connections.Add(trigger.NextStagePos);
+        }
+
+
+
+        if (isStartStage)
+            OpenDoor();
     }
 
-    private TriggerToNextStage trigger = null;
-    private ConsoleToNextStage console = null;
 
     [SerializeField]
     private MinSpawnPoint minSpawnPoint = null;
     [SerializeField]
     private MaxSpawnPoint maxSpawnPoint = null;
+    [SerializeField]
+    private bool isStartStage = false;
+
+    private List<ENextStagePos> connections = null;
+
+    private StageMoveTrigger[] triggers = null;
+    private DoorToNextStage[] doors = null;
 }

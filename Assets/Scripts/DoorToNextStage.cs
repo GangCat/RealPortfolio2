@@ -23,5 +23,4 @@ public class DoorToNextStage : MonoBehaviour
         }
     }
 
-
 }

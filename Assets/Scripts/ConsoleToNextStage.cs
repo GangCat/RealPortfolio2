@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class ConsoleToNextStage : InteractiveBase
 {
+    public void Init()
+    {
+        GetComponent<Collider>().enabled = false;
+
+    }
+
     public void ActivateTrigger()
     {
         GetComponent<Collider>().enabled = true;
@@ -17,11 +23,6 @@ public class ConsoleToNextStage : InteractiveBase
     private void Awake()
     {
         door = GetComponentInChildren<DoorToNextStage>();
-    }
-
-    private void Start()
-    {
-        GetComponent<Collider>().enabled = false;
     }
 
     private DoorToNextStage door = null;
